@@ -1,7 +1,7 @@
 <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
-  <div class="container flex items-center justify-end h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
+  <div class="container flex items-center justify-end h-full px-6 mx-auto text-green-600 dark:text-green-300">
     <!-- Mobile hamburger -->
-    <button class=" p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
+    <button class=" p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-green"
       @click="toggleSideMenu" aria-label="Menu">
       <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
         <path fill-rule="evenodd"
@@ -50,7 +50,7 @@
           class="absolute right-0 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
           <div class="px-2 py-2 dark:bg-gray-800 bg-white rounded-md shadow dark-mode:bg-gray-800">
 
-            <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-purple-600 dark:text-gray-100"
+            <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-green-600 dark:text-gray-100"
               href="#">Link #1</a>
 
           </div>
@@ -65,7 +65,7 @@
     <ul class="flex items-center flex-shrink-2 space-x-6">
       <!-- Theme toggler -->
       <li class="flex">
-        <button class="rounded-md focus:outline-none focus:shadow-outline-purple" @click="toggleTheme"
+        <button class="rounded-md focus:outline-none focus:shadow-outline-green" @click="toggleTheme"
           aria-label="Toggle color mode">
           <template x-if="!dark">
             <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">

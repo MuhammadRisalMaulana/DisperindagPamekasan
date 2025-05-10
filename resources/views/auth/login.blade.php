@@ -56,7 +56,5 @@
                 </x-button>
             </div>
         </form>
-
-        <p> Tidak punya akun? </p><a class="background-colour: to-blue-600"href="/register">Daftar di sini!</a>
     </x-auth-card>
 </x-guest-layout>

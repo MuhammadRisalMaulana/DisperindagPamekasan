@@ -68,8 +68,7 @@
             class="block w-full mt-1 text-sm form-input" />
         </label>
 
-        <button type="submit"
-          class="mt-4 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">
+        <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
           Laporkan
         </button>
         

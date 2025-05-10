@@ -1,7 +1,7 @@
 <!-- Desktop sidebar -->
 <aside class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
   <div class="py-4 text-gray-500 dark:text-gray-400">
-    <img src="{{ asset('img/logodisperindag.png')}}" alt=""
+    <img src="{{ asset('img/logoicon.png')}}" alt=""
       class="inline-flex ml-3 items-center transform transition hover:scale-125 duration-300 ease-in-out"
       style="width: 50px; height: auto;" />
 

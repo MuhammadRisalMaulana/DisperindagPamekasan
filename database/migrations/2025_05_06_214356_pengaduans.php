@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePengaduan1Table extends Migration
+class Pengaduans extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class CreatePengaduan1Table extends Migration
     {
         Schema::create('pengaduans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('name');
             $table->text('user_alamat');
             $table->string('phone');
@@ -23,6 +22,8 @@ class CreatePengaduan1Table extends Migration
             $table->text('lokasi_kejadian');
             $table->text('keterangan_tambahan')->nullable();
             $table->string('image');
+            $table->string('status')->default('Belum di Proses');
+            $table->string('token', 6)->unique();
             $table->timestamps();
         });
     }

@@ -57,6 +57,7 @@ class PengaduanController extends Controller
 {
     // Validasi data input
     $request->validate([
+        
         'name' => 'required|string|max:255',
         'user_alamat' => 'required|string|max:255',
         'user_telepon' => 'required|string|max:20',
@@ -74,6 +75,7 @@ class PengaduanController extends Controller
 
     // Simpan data ke database
     Pengaduan::create([
+        
         'name' => $request->name,
         'user_alamat' => $request->user_alamat,
         'phone' => $request->user_telepon,

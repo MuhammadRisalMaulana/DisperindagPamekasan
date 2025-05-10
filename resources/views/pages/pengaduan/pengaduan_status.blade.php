@@ -30,7 +30,7 @@
         </label>
 
         <button type="submit"
-          class="mt-4 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">
+          class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
           Cek Pengaduan
         </button>
       </div>
@@ -47,6 +47,7 @@
       <p><strong>Keterangan Tambahan:</strong> {{ $pengaduan->keterangan_tambahan ?? '-' }}</p>
       <p><strong>Token:</strong> {{ $pengaduan->token }}</p>
       <p><strong>Waktu Pengaduan:</strong> {{ $pengaduan->created_at->format('d M Y H:i') }}</p>
+      <p><strong>Status:</strong> {{ $pengaduan->status }}</p>
       <p><strong>Bukti Foto:</strong><br>
         <img src="{{ asset('storage/' . $pengaduan->image) }}" alt="Bukti Foto" class="mt-2 w-64 rounded">
       </p>
