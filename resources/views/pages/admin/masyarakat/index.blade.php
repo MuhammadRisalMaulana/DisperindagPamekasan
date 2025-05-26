@@ -41,7 +41,6 @@
                                     <th class="px-4 py-3">Nama</th>
                                     <th class="px-4 py-3">Alamat</th>
                                     <th class="px-4 py-3">No. Hp</th>
-                                    <th class="px-4 py-3">Email</th>
                                     <th class="px-4 py-3">Aksi</th>
                                 </tr>
                             </thead>
@@ -57,12 +56,12 @@
                                         <td class="px-4 py-3 text-sm">
                                             {{ $masyarakat->phone }}
                                         </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            {{ $masyarakat->email }}
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            <button
-                                                onclick="hapusData('{{ route('kelola-masyarakat.destroy', $masyarakat->id) }}')"
+                                        <td class="px-4 py-3 text-sm flex space-x-2">
+                                            <a href="{{ route('kelola-masyarakat.edit', $masyarakat->id) }}"
+                                                class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                                                Edit
+                                            </a>
+                                            <button onclick="hapusData('{{ route('kelola-masyarakat.destroy', $masyarakat->id) }}')"
                                                 class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700">
                                                 Hapus
                                             </button>

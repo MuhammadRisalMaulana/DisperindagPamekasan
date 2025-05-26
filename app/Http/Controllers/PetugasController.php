@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Pengaduan;
+use App\Models\LogAktivitas;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +32,14 @@ class PetugasController extends Controller
         $data = DB::table('users')->whereIn('roles', ['PETUGAS', 'ADMIN'])->get();
         $jumlahAdmin = User::where('roles', 'ADMIN')->count();
         $jumlahPetugas = User::where('roles', 'PETUGAS')->count();
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aksi'    => "Melihat daftar petugas",
+            'model'   => 'User',
+            'model_id'=> null,
+            'status'  => 'Merubah Status Pengaduan',
+        ]);
 
         return view('pages.admin.petugas.index', [
             'data' => $data,
@@ -77,6 +87,13 @@ class PetugasController extends Controller
 
         ]);
 
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aksi'    => "Menambahkan petugas baru dengan ID: {$user->id}",
+            'model'   => 'User',
+            'model_id'=> $user->id,
+        ]);
+
         Alert::success('Berhasil', 'Petugas baru ditambahkan');
         return redirect('admin/petugas');
     }
@@ -85,51 +102,18 @@ class PetugasController extends Controller
         // Ambil semua data pengaduan tanpa filter user
         $pengaduan = Pengaduan::all();
 
+         // Log aktivitas lihat riwayat pengaduan
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'status'    => "Melihat riwayat pengaduan",
+            'model'   => 'Pengaduan',
+            'model_id'=> null,
+        ]);
+
         // Kirim ke view
         return view('riwayat_pengaduan', compact('pengaduan'));
     }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy($id)
     {
         $user = User::find($id);
@@ -148,6 +132,14 @@ class PetugasController extends Controller
         }
 
         $user->delete();
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aksi'    => "Menghapus petugas dengan ID: {$id}",
+            'model'   => 'User',
+            'model_id'=> $id,
+        ]);
+
         Alert::success('Berhasil', 'Data berhasil dihapus');
         return redirect()->route('petugas.index');
     }

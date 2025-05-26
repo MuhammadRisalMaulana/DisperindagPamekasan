@@ -40,7 +40,7 @@
                             <tr
                                 class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                                 <th class="px-4 py-3">Bukti Foto</th>
-                                <th class="px-4 py-3">Nama</th>
+                                <th class="px-4 py-3">Pelapor</th>
                                 <th class="px-4 py-3">Tanggal</th>
                                 <th class="px-4 py-3">Status</th>
                                 <th class="px-4 py-3">Aksi</th>

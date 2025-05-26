@@ -51,7 +51,6 @@
                         <select
                             class="block w-full text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
                             name="roles" required>
-                            <option value="ADMIN">Admin</option>
                             <option value="PETUGAS">Petugas</option>
                         </select>
                     </label>

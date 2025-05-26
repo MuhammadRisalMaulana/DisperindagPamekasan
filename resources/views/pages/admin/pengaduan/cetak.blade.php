@@ -1,64 +1,127 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MADUKONCER | Laporan</title>
-  <style>
-    img{
-      height: 100px;;
-    }
+    <meta charset="UTF-8">
+    <title>Laporan Pengaduan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #333;
+        }
 
-    hr.solid {
-    border-top: 2px solid #4a4a4a;
-    }
-  </style>
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+        .header h3 {
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .header h5 {
+            margin: 5px 0;
+            color: #34495e;
+        }
+
+        .header small a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+
+        hr.solid {
+            border-top: 2px solid #7f8c8d;
+            margin: 10px 0;
+        }
+
+        .section-title {
+            background-color: #f2f2f2;
+            padding: 6px 10px;
+            font-weight: bold;
+            border-left: 4px solid #2980b9;
+            margin-top: 20px;
+        }
+
+        .info {
+            margin: 8px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th {
+            background-color: #2980b9;
+            color: white;
+            padding: 8px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            vertical-align: top;
+        }
+
+        img {
+            max-height: 150px;
+            max-width: 100%;
+            object-fit: contain;
+            display: block;
+            margin: auto;
+        }
+    </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="title text-center mb-5">
-      <h3>LAPORAN PENGADUAN MASYARAKAT</h3>
-      <h5>DINAS PERINDUSTRIAN DAN PERDAGANGAN KABUPATEN PAMEKASAN</h5>
-      <h7><a href="https://disperindag.pamekasankab.go.id/" target="_blank">disperindag.pamekasankab.go.id</a></h7>
+
+    <div class="header">
+        <h3>LAPORAN PENGADUAN MASYARAKAT</h3>
+        <h5>DINAS PERINDUSTRIAN DAN PERDAGANGAN<br>KABUPATEN PAMEKASAN</h5>
+        <small><a href="https://disperindag.pamekasankab.go.id/">disperindag.pamekasankab.go.id</a></small>
     </div>
+
     <hr class="solid">
 
-    <div>
-      <h6>Laporan Pengaduan</h6>
-      <h6>{{ $pengaduan->created_at->locale('id')->isoFormat('dddd, D MMMM YYYY - HH:mm:ss') }}</h6>
-    </div>
-    <hr class="solid">
+    <div class="section-title">Informasi Waktu</div>
+    <div class="info">Tanggal: {{ \Carbon\Carbon::parse($pengaduan->created_at)->locale('id')->isoFormat('dddd, D MMMM YYYY - HH:mm:ss') }}</div>
 
-    <div class="mt-3 mb-3">
-      <h6>Nama : {{ $pengaduan->name }}</h6>
-      <h6>Alamat : {{ $pengaduan->user_alamat }}</h6>
-      <h6>No. Telepon : {{ $pengaduan->phone }}</h6>
-    </div>
+    <div class="section-title">Data Pelapor</div>
+    <div class="info">Nama: {{ $pengaduan->name }}</div>
+    <div class="info">Alamat: {{ $pengaduan->user_alamat }}</div>
+    <div class="info">No. Telepon: {{ $pengaduan->phone }}</div>
 
-    <!-- Lokasi Kejadian -->
-    <div class="mt-3">
-      <h6>Lokasi Kejadian: {{ $pengaduan->lokasi_kejadian }}</h6>
-    </div>
+    <div class="section-title">Detail Pengaduan</div>
+    <div class="info">Lokasi Kejadian: {{ $pengaduan->lokasi_kejadian }}</div>
+    <div class="info">Keterangan Tambahan: {{ $pengaduan->keterangan_tambahan ?? 'Tidak ada keterangan tambahan' }}</div>
 
-    <!-- Keterangan Tambahan -->
-    <div class="mt-3">
-      <h6>Keterangan Tambahan: {{ $pengaduan->keterangan_tambahan ?? 'Tidak ada keterangan tambahan' }}</h6>
-    </div>
-
-    <table class="table table-bordered">
-      <thead class="thead">
-        <tr>
-          <th scope="col">Laporan Pengaduan</th>
-          <th scope="col">Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <td>{{ $pengaduan->description }}</td>
-        <td>{{ $pengaduan->status }}</td>
-      </tbody>
+    <table>
+        <thead>
+            <tr>
+                <th>Foto Pengaduan</th>
+                <th>Deskripsi Pengaduan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @if($pengaduan->image)
+                        <img src="{{ public_path('storage/' . $pengaduan->image) }}" alt="Foto Pengaduan">
+                    @else
+                        Tidak ada gambar
+                    @endif
+                </td>
+                <td>{{ $pengaduan->description }}</td>
+            </tr>
+        </tbody>
     </table>
-  </div>
+
 </body>
+
 </html>

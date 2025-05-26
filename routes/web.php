@@ -7,6 +7,9 @@ use App\Http\Controllers\MasyarakatController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\TanggapanController;
+use App\Http\Controllers\BeritaController;
+use App\Models\Berita;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -22,23 +25,23 @@ use RealRashid\SweetAlert\Facades\Alert;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+Route::get('/berita/{id}', [WelcomeController::class, 'berita'])->name('berita.berita');
+
 // Admin/Petugas routes with middleware 'auth' and 'admin'
 Route::prefix('admin')
     ->middleware(['auth', 'admin'])
     ->group(function () {
         Route::get('/', 'DashboardController@index')->name('dashboard');
 
+        // Pengaduan
         Route::resource('pengaduans', 'PengaduanController');
 
+        // Tanggapan
         Route::resource('tanggapan', 'TanggapanController');
 
-        Route::resource('kelola-masyarakat', 'KelolaMasyarakatController');
-        Route::get('/kelola-masyarakat/{id}/delete', 'KelolaMasyarakatController@confirmDelete')->name('kelola-masyarakat.confirmDelete');
-        Route::delete('/kelola-masyarakat/{id}', 'KelolaMasyarakatController@destroy')->name('kelola-masyarakat.destroy');
 
+        // Petugas
         Route::resource('petugas', 'PetugasController');
         Route::get('/petugas/{id}/delete', 'PetugasController@confirmDelete')->name('petugas.confirmDelete');
         Route::delete('/petugas/{id}', 'PetugasController@destroy')->name('petugas.destroy');
@@ -47,8 +50,20 @@ Route::prefix('admin')
         Route::get('laporan', 'AdminController@laporan')->name('laporan.index');
         Route::get('laporan/cetak', 'AdminController@cetak');
         Route::get('pengaduan/cetak/{id}', 'AdminController@pdf');
+        Route::post('/admin/pengaduan/{id}/update', [PengaduanController::class, 'updateStatus'])->name('pengaduan.update.status');
 
+        Route::get('/log_aktivitas', [AdminController::class, 'logAktivitas'])->name('admin.log_aktivitas');
+        //Berita
+        Route::get('berita', [BeritaController::class, 'index'])->name('berita.index');
+        Route::get('berita/create', [BeritaController::class, 'create'])->name('berita.create');
+        Route::post('berita', [BeritaController::class, 'store'])->name('berita.store');
+        Route::get('show_berita/{id}', [BeritaController::class, 'show'])->name('berita.show');
+        Route::get('berita/{id}/edit', [BeritaController::class, 'edit'])->name('berita.edit');
+        Route::put('berita/{id}', [BeritaController::class, 'update'])->name('berita.update');
+        Route::delete('berita/{id}', [BeritaController::class, 'destroy'])->name('berita.destroy');
     });
+
+
 // Masyarakat routes
 Route::get('/pengaduan', [MasyarakatController::class, 'index'])->name('pengaduan.index');
 Route::get('/riwayat-pengaduan', [PengaduanController::class, 'riwayat'])->name('riwayat.pengaduan');
@@ -59,8 +74,9 @@ Route::get('/pengaduan/sukses', [PengaduanController::class, 'sukses'])->name('p
 Route::get('/pengaduan/create', [PengaduanController::class, 'create'])->name('pengaduan.create');
 Route::get('/pengaduan/status', [PengaduanController::class, 'status'])->name('pengaduan.status');
 Route::get('/pengaduan/check', [PengaduanController::class, 'check'])->name('pengaduan.check');
+Route::get('berita/{id}', [WelcomeController::class, 'berita'])->name('berita.detail');
+Route::get('berita', [BeritaController::class, 'allberita'])->name('allberita');
 
-    
 
 // Masyarakat
 // Route::prefix('user')
