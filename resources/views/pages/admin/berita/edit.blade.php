@@ -18,24 +18,24 @@
             <div class="mb-4">
                 <label class="block text-sm mb-2">Judul</label>
                 <input type="text" name="judul" value="{{ old('judul', $berita->judul) }}" required
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-purple-300">
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300">
             </div>
 
             <div class="mb-4">
                 <label class="block text-sm mb-2">Keterangan</label>
                 <textarea name="keterangan" rows="5" required
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-purple-300">{{ old('keterangan', $berita->keterangan) }}</textarea>
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300">{{ old('keterangan', $berita->keterangan) }}</textarea>
             </div>
 
             <div class="mb-4">
                 <label class="block text-sm mb-2">Gambar Saat Ini</label>
                 <img src="{{ Storage::url($berita->gambar) }}" class="w-48 rounded mb-2" alt="Gambar Berita">
                 <input type="file" name="gambar" accept="image/*"
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-purple-300">
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300">
             </div>
 
             <button type="submit"
-                class="px-5 py-2 text-white bg-purple-600 rounded hover:bg-purple-700 transition">
+                class="px-5 py-2 text-white bg-blue-600 rounded hover:bg-blue-700 transition">
                 Update
             </button>
         </form>

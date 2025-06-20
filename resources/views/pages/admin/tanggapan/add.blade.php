@@ -17,7 +17,7 @@
                     <label class="block text-sm">
                         <span class="text-gray-700 dark:text-gray-400">Tanggapan</span>
                         <select
-                            class="block w-full text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                            class="block w-full text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray"
                             name="tanggapan" required>
                             <option value="" disabled selected>Pilih Tanggapan</option>
                             <option value="Terima kasih atas laporan Anda, kami akan menindaklanjuti segera.">Terima kasih
@@ -37,7 +37,7 @@
                         <span class="text-gray-700 dark:text-gray-400">Status</span>
 
                         <select
-                            class="block w-full text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                            class="block w-full text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray"
                             name="status" required>
                             <option value="Belum di Proses">Belum di Proses</option>
                             <option value="Sedang di Proses">Sedang di Proses</option>
@@ -48,7 +48,7 @@
 
 
                     <button type="submit"
-                        class="mt-4 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                        class="mt-4 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                         Tanggapi
                     </button>
                 </div>

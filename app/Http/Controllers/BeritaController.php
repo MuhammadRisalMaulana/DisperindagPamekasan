@@ -55,36 +55,36 @@ class BeritaController extends Controller
         return view('pages.admin.berita.show', compact('berita'));
     }
 
-    public function edit(Berita $berita)
-    {
-        return view('pages.admin.berita.edit', compact('berita'));
-    }
+public function edit(Berita $berita)
+{
+    return view('pages.admin.berita.edit', compact('berita'));
+}
 
-    public function update(Request $request, Berita $berita)
-    {
-        $request->validate([
-            'judul' => 'required|string|max:255',
-            'keterangan' => 'required|string',
-            'gambar' => 'nullable|image|max:2048',
-        ]);
+public function update(Request $request, Berita $berita)
+{
+    $request->validate([
+        'judul' => 'required|string|max:255',
+        'keterangan' => 'required|string',
+        'gambar' => 'nullable|image|max:2048',
+    ]);
 
-        $data = [
-            'judul' => $request->judul,
-            'keterangan' => $request->keterangan,
-        ];
+    $data = [
+        'judul' => $request->judul,
+        'keterangan' => $request->keterangan,
+    ];
 
-        if ($request->hasFile('gambar')) {
-            if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
-                Storage::disk('public')->delete($berita->gambar);
-            }
-
-            $data['gambar'] = $request->file('gambar')->store('berita', 'public');
+    if ($request->hasFile('gambar')) {
+        if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
+            Storage::disk('public')->delete($berita->gambar);
         }
 
-        $berita->update($data);
-
-        return redirect()->route('berita.index')->with('success', 'Berita berhasil diupdate');
+        $data['gambar'] = $request->file('gambar')->store('berita', 'public');
     }
+
+    $berita->update($data);
+
+    return redirect()->route('berita.index')->with('success', 'Berita berhasil diupdate');
+}
 
     public function destroy(Berita $berita)
     {

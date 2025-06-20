@@ -11,7 +11,7 @@
         <ul class="mt-6">
             <li class="relative px-6 py-3">
                 <span
-                    class="{{ request()->routeIs('dashboard') ? 'absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg' : '' }} "
+                    class="{{ request()->routeIs('dashboard') ? 'absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg' : '' }} "
                     aria-hidden="true"></span>
                 <a class="inline-flex items-center w-full text-sm font-semibold  transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                     href="{{ route('dashboard') }} ">
@@ -26,7 +26,7 @@
         <ul>
             <li class="relative px-6 py-3">
                 <span
-                    class="{{ request()->routeIs('pengaduans.index') ? 'absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg' : '' }} "
+                    class="{{ request()->routeIs('pengaduans.index') ? 'absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg' : '' }} "
                     aria-hidden="true"></span>
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                     href="{{ route('pengaduans.index') }}">
@@ -43,7 +43,7 @@
             <ul>
                 <li class="relative px-6 py-3">
                     <span
-                        class="{{ request()->is('admin/petugas') ? 'absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg' : '' }} "
+                        class="{{ request()->is('admin/petugas') ? 'absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg' : '' }} "
                         aria-hidden="true"></span>
                     <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                         href="{{ route('petugas.index') }}">
@@ -59,7 +59,7 @@
         <ul>
             <li class="relative px-6 py-3">
                 <span
-                    class="{{ request()->is('admin/laporan') ? 'absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg' : '' }} "
+                    class="{{ request()->is('admin/laporan') ? 'absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg' : '' }} "
                     aria-hidden="true"></span>
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                     href="{{ url('admin/laporan') }}">
@@ -77,11 +77,12 @@
             <ul>
                 <li class="relative px-6 py-3">
                     <span
-                        class="{{ request()->is('admin/log-aktivitas') ? 'absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg' : '' }}"
-                        aria-hidden="true"></span>
+                        class="{{ request()->is('admin/log_aktivitas') ? 'absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg' : '' }}"
+                        aria-hidden="true">
+                    </span>
                     <a href="{{ url('admin/log_aktivitas') }}"
                         class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200
-              {{ request()->is('admin/log-aktivitas') ? 'text-gray-800 dark:text-gray-200' : '' }}">
+            {{ request()->is('admin/log_aktivitas') ? 'text-gray-800 dark:text-gray-200' : '' }}">
                         <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd"
                                 d="M3 3a1 1 0 000 2h1v10H3a1 1 0 000 2h14a1 1 0 000-2h-1V5h1a1 1 0 000-2H3zm2 4v6h10V7H5z"
@@ -95,7 +96,7 @@
         <ul>
             <li class="relative px-6 py-3">
                 <span
-                    class="{{ request()->is('admin/berita') ? 'absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg' : '' }}"
+                    class="{{ request()->is('admin/berita') ? 'absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg' : '' }}"
                     aria-hidden="true"></span>
                 <a href="{{ url('admin/berita') }}"
                     class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200

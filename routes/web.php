@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KelolaMasyarakatController;
@@ -42,9 +44,14 @@ Route::prefix('admin')
 
 
         // Petugas
-        Route::resource('petugas', 'PetugasController');
-        Route::get('/petugas/{id}/delete', 'PetugasController@confirmDelete')->name('petugas.confirmDelete');
-        Route::delete('/petugas/{id}', 'PetugasController@destroy')->name('petugas.destroy');
+        Route::get('/petugas', [PetugasController::class, 'index'])->name('petugas.index');
+        Route::get('/petugas/create', [PetugasController::class, 'create'])->name('petugas.create');
+        Route::post('/petugas/store', [PetugasController::class, 'store'])->name('petugas.store');
+        Route::get('/petugas/{id}/edit', [PetugasController::class, 'edit'])->name('petugas.edit');
+        Route::post('/petugas/update/{id}', [PetugasController::class, 'update'])->name('petugas.update');
+        Route::get('/petugas/{id}/delete', [PetugasController::class, 'confirmDelete'])->name('petugas.confirmDelete'); // Jika kamu ingin memakai konfirmasi
+        Route::delete(uri: '/petugas/{id}', action: [PetugasController::class, 'destroy'])->name('petugas.destroy');
+
 
 
         Route::get('laporan', 'AdminController@laporan')->name('laporan.index');
@@ -58,9 +65,9 @@ Route::prefix('admin')
         Route::get('berita/create', [BeritaController::class, 'create'])->name('berita.create');
         Route::post('berita', [BeritaController::class, 'store'])->name('berita.store');
         Route::get('show_berita/{id}', [BeritaController::class, 'show'])->name('berita.show');
-        Route::get('berita/{id}/edit', [BeritaController::class, 'edit'])->name('berita.edit');
-        Route::put('berita/{id}', [BeritaController::class, 'update'])->name('berita.update');
-        Route::delete('berita/{id}', [BeritaController::class, 'destroy'])->name('berita.destroy');
+        Route::get('berita/{berita}/edit', [BeritaController::class, 'edit'])->name('berita.edit');
+        Route::put('berita/{berita}', [BeritaController::class, 'update'])->name('berita.update');
+        Route::delete('berita/{id}', action: [BeritaController::class, 'destroy'])->name('berita.destroy');
     });
 
 
@@ -77,6 +84,8 @@ Route::get('/pengaduan/check', [PengaduanController::class, 'check'])->name('pen
 Route::get('berita/{id}', [WelcomeController::class, 'berita'])->name('berita.detail');
 Route::get('berita', [BeritaController::class, 'allberita'])->name('allberita');
 
+require __DIR__ . '/auth.php';
+
 
 // Masyarakat
 // Route::prefix('user')
@@ -87,5 +96,3 @@ Route::get('berita', [BeritaController::class, 'allberita'])->name('allberita');
 //         Route::get('pengaduan', 'MasyarakatController@lihat');
 //         Route::delete('masyarakat/{id}', 'MasyarakatController@destroy')->name('masyarakat.destroy');
 //     });
-
-require __DIR__ . '/auth.php';

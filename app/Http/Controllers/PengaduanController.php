@@ -33,9 +33,7 @@ class PengaduanController extends Controller
 
         $items = $query->orderBy('created_at', 'DESC')->get();
 
-        return view('pages.admin.pengaduan.index', [
-            'items' => $items
-        ]);
+        return view('pages.admin.pengaduan.index',['items' => $items]);
     }
 
     /**
@@ -45,7 +43,7 @@ class PengaduanController extends Controller
      */
     public function create()
     {
-        return view('masyarakat.index');
+        return view('pengaduan.index');
     }
 
     /**
@@ -156,14 +154,6 @@ class PengaduanController extends Controller
         $pengaduan->status = $request->status;
         $pengaduan->save();
 
-        $pesan = "📌 *Status Pengaduan Anda*\n"
-            . "Token: {$pengaduan->token}\n"
-            . "Status: {$pengaduan->status}";
-
-        if (!empty($pengaduan->no_telegram)) {
-            $this->sendTelegramMessage($pengaduan->no_telegram, $pesan);
-        }
-
         return back()->with('success', 'Status diperbarui');
     }
 
@@ -202,6 +192,6 @@ class PengaduanController extends Controller
         $pengaduan->delete();
 
         Alert::success('Berhasil', 'Pengaduan telah dihapus');
-        return redirect()->route('pengaduan.index');
+        return redirect()->route('pengaduans.index');
     }
 }

@@ -11,7 +11,7 @@
 
             <div class="my-4 mb-6">
                 <a href="<?php echo e(route('petugas.create')); ?> "
-                    class="px-5 py-3  font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                    class="px-5 py-3  font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                     Tambah Petugas
                 </a>
             </div>
@@ -61,22 +61,24 @@
                                         <?php echo e($petugas->roles); ?>
 
                                     </td>
-                                    <td>
-                                        <?php if(
-                                            !($petugas->roles === 'ADMIN' && $jumlahAdmin <= 1) && 
-                                            !($petugas->roles === 'PETUGAS' && $jumlahPetugas <= 1)
-                                        ): ?>
-                                            <form action="<?php echo e(route('petugas.destroy', $petugas->id)); ?>" method="POST" style="display: inline;">
+                                    <td class="flex items-center gap-2 px-4 py-3">
+                                        <a href="<?php echo e(route('petugas.edit', $petugas->id)); ?>"
+                                            class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600">
+                                            Edit
+                                        </a>
+                                        <?php if(!($petugas->roles === 'ADMIN' && $jumlahAdmin <= 1) && !($petugas->roles === 'PETUGAS' && $jumlahPetugas <= 1)): ?>
+                                            <form action="<?php echo e(route('petugas.destroy', $petugas->id)); ?>" method="POST"
+                                                style="display: inline;">
                                                 <?php echo csrf_field(); ?>
                                                 <?php echo method_field('DELETE'); ?>
-                                                <button type="submit" 
+                                                <button type="submit"
                                                     class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700">
                                                     Hapus
                                                 </button>
                                             </form>
                                         <?php endif; ?>
                                     </td>
-                                    
+
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <tr>

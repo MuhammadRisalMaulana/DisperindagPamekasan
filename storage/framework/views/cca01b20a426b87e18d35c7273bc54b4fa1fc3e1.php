@@ -1,63 +1,49 @@
 
 
-<?php $__env->startSection('title', 'Riwayat Aksi Admin'); ?>
+<?php $__env->startSection('title', 'Log Aktivitas'); ?>
 
 <?php $__env->startSection('content'); ?>
-    <!-- Full width, rapi tanpa ruang polos kiri dan kanan -->
-    <div class="w-full py-8 bg-gray-50 min-h-screen">
-        <!-- Konten dengan padding horizontal agar tidak menempel ujung -->
-        <div class="w-full px-6">
-            <!-- Judul -->
-            <div class="mb-6">
-                <h1 class="text-3xl font-bold text-gray-800">
-                    📊 Riwayat Aksi Admin & Petugas
-                </h1>
-                <p class="text-sm text-gray-500 mt-1">
-                    Semua aktivitas yang dilakukan oleh Admin dan Petugas tercatat di bawah ini.
-                </p>
+    <main class="h-full pb-16 overflow-y-auto">
+        <div class="container px-6 py-6 mx-auto">
+            <h2 class="mb-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                Log Aktivitas
+            </h2>
+
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <?php $__empty_1 = true; $__currentLoopData = $logs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $log): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <div
+                        class="bg-gray-50 p-4 rounded-md shadow-md border border-gray-200 transform transition hover:shadow-lg hover:bg-gray-100">
+
+                        <h3 class="text-lg font-semibold text-gray-800">
+                            <?php echo e(optional($log->user)->name ?? 'Pengguna tidak ditemukan'); ?>
+
+                        </h3>
+
+                        <p class="text-gray-500 mt-1">
+                            <?php echo e($log->status); ?>
+
+                        </p>
+
+                        <span class="text-gray-400 mt-2 block text-sm">
+                            <?php echo e($log->created_at->format('d F Y, H:i')); ?>
+
+                        </span>
+                    </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <div class="col-span-full bg-gray-50 p-4 rounded-md shadow-md border border-gray-200">
+                        <p class="text-gray-500">Belum ada riwayat aktivitas.</p>
+                    </div>
+                <?php endif; ?>
             </div>
 
-            <!-- Tabel Aktivitas -->
-            <div class="bg-white shadow-md rounded-lg border border-gray-200 w-full">
-                <table class="w-full table-auto divide-y divide-gray-200 text-sm">
-                    <thead class="bg-gray-100 text-gray-700 uppercase text-xs tracking-wider">
-                        <tr>
-                            <th class="px-6 py-3 text-left font-semibold">No</th>
-                            <th class="px-6 py-3 text-left font-semibold">Pengguna</th>
-                            <th class="px-6 py-3 text-left font-semibold">Status</th>
-                            <th class="px-6 py-3 text-left font-semibold">Model</th>
-                            <th class="px-6 py-3 text-left font-semibold">Waktu</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <?php $__empty_1 = true; $__currentLoopData = $logs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $log): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                            <tr class="hover:bg-gray-50 transition duration-150">
-                                <td class="px-6 py-4 font-medium text-gray-700">
-                                    <?php echo e($loop->iteration + ($logs->currentPage() - 1) * $logs->perPage()); ?></td>
-                                <td class="px-6 py-4 text-gray-800"><?php echo e(optional($log->user)->name ?? 'Tidak diketahui'); ?>
-
-                                </td>
-                                <td class="px-6 py-4 text-blue-600 font-semibold"><?php echo e($log->status); ?></td>
-                                <td class="px-6 py-4 text-gray-700"><?php echo e($log->model ?? '-'); ?></td>
-                                <td class="px-6 py-4 text-gray-500"><?php echo e($log->created_at->format('d-m-Y H:i:s')); ?></td>
-                            </tr>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                            <tr>
-                                <td colspan="5" class="px-6 py-6 text-center text-gray-500">Belum ada log aktivitas.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-
-
-            <!-- Paginasi -->
+            <!-- Pagination -->
             <div class="mt-6">
-                <?php echo e($logs->links('pagination::tailwind')); ?>
+                <?php echo e($logs->links('pagination::tailwind_next_back')); ?>
 
             </div>
         </div>
-    </div>
+    </main>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\DISPERINDAG_PROJECT-main\resources\views/pages/admin/log_aktivitas/index.blade.php ENDPATH**/ ?>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Pengaduan;
 use App\Models\Tanggapan;
 use App\Models\User;
+use App\Models\Berita;
 
 class DashboardController extends Controller
 {
@@ -14,6 +15,7 @@ class DashboardController extends Controller
         // Hitung total data
         $totalPengaduan = Pengaduan::count();
         $totalUser = User::where('roles', 'USER')->count();
+        $totalBerita = Berita::count();
         $totalPetugas = User::where('roles', 'PETUGAS')->count();
         $totalAdmin = User::where('roles', 'ADMIN')->count();
         $totalTanggapan = Tanggapan::count();
@@ -27,6 +29,7 @@ class DashboardController extends Controller
         return view('pages.admin.dashboard', [
             'pengaduan' => $totalPengaduan,
             'user' => $totalUser,
+            'berita'=> $totalBerita,
             'petugas' => $totalPetugas,
             'admin' => $totalAdmin,
             'tanggapan' => $totalTanggapan,

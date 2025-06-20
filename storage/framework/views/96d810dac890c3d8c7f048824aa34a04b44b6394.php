@@ -63,7 +63,7 @@
 
     <!-- Hero -->
     <section class="relative h-screen flex items-center justify-center text-white">
-        <img src="<?php echo e(asset('img/kantor.jpeg')); ?>"
+        <img src="<?php echo e(asset('img/kantorvektor.png')); ?>"
             class="absolute inset-0 w-full h-full object-cover brightness-75 blur-sm z-0" alt="Background" />
         <div class="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
         <div class="container z-20 relative flex flex-col md:flex-row items-center px-6 text-center md:text-left">
@@ -132,7 +132,7 @@
                             </div>
                         </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </div>  
+                </div>
 
                 <!-- Pagination -->
                 <div class="mt-8 flex justify-center">
@@ -146,8 +146,7 @@
     </section>
 
 
-
-    <section id="lokasi" class="py-20 bg-white">
+    <section id="lokasi" class="py-20 bg-gray-100">
         <div class="container mx-auto px-6 flex flex-col md:flex-row items-center">
 
             <!-- Informasi Lokasi -->
@@ -173,10 +172,11 @@
         </div>
     </section>
 
+
     <!-- Footer -->
     <footer class="bg-green-600 text-white py-4 text-center">
         © <?php echo e(now()->year); ?> MADUKONCER DISPERINDAG PAMEKASAN | By
-        <a href="/" class="underline hover:text-green-200" target="_blank">POLINEMA PSDKU PAMEKASAN</a>
+        <a href="login" class="underline hover:text-green-200" target="_blank">POLINEMA PSDKU PAMEKASAN</a>
     </footer>
 
     <?php echo $__env->make('sweetalert::alert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>

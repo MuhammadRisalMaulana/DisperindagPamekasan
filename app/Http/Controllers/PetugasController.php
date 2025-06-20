@@ -35,10 +35,8 @@ class PetugasController extends Controller
 
         LogAktivitas::create([
             'user_id' => auth()->id(),
-            'aksi'    => "Melihat daftar petugas",
-            'model'   => 'User',
-            'model_id'=> null,
-            'status'  => 'Merubah Status Pengaduan',
+            'aksi' => "Akses halaman daftar petugas",
+            'status' => 'Melihat data petugas'
         ]);
 
         return view('pages.admin.petugas.index', [
@@ -89,9 +87,8 @@ class PetugasController extends Controller
 
         LogAktivitas::create([
             'user_id' => auth()->id(),
-            'aksi'    => "Menambahkan petugas baru dengan ID: {$user->id}",
-            'model'   => 'User',
-            'model_id'=> $user->id,
+            'aksi' => "Menambahkan petugas baru (ID: {$user->id})",
+            'status' => 'Petugas berhasil ditambahkan'
         ]);
 
         Alert::success('Berhasil', 'Petugas baru ditambahkan');
@@ -102,18 +99,55 @@ class PetugasController extends Controller
         // Ambil semua data pengaduan tanpa filter user
         $pengaduan = Pengaduan::all();
 
-         // Log aktivitas lihat riwayat pengaduan
+        // Log aktivitas lihat riwayat pengaduan
         LogAktivitas::create([
             'user_id' => auth()->id(),
-            'status'    => "Melihat riwayat pengaduan",
-            'model'   => 'Pengaduan',
-            'model_id'=> null,
+            'aksi' => "Akses halaman riwayat pengaduan",
+            'status' => 'Melihat semua data pengaduan'
         ]);
+
 
         // Kirim ke view
         return view('riwayat_pengaduan', compact('pengaduan'));
     }
-    
+
+    public function edit($id)
+    {
+        $petugas = User::findOrFail($id);
+        return view('pages.admin.petugas.edit', compact('petugas'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'alamat' => 'required|string',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'phone' => 'required|string|max:15',
+            'password' => 'nullable|string|confirmed|min:8',
+        ]);
+
+        $user->update([
+            'alamat' => $request->alamat,
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'roles' => $request->roles,
+            'password' => $request->password ? \Hash::make($request->password) : $user->password,
+        ]);
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aksi' => "Mengedit petugas (ID: {$user->id})",
+            'status' => 'Petugas berhasil diupdate'
+        ]);
+
+        Alert::success('Berhasil', 'Data petugas berhasil diupdate');
+        return redirect()->route('petugas.index');
+    }
+
     public function destroy($id)
     {
         $user = User::find($id);
@@ -135,9 +169,8 @@ class PetugasController extends Controller
 
         LogAktivitas::create([
             'user_id' => auth()->id(),
-            'aksi'    => "Menghapus petugas dengan ID: {$id}",
-            'model'   => 'User',
-            'model_id'=> $id,
+            'aksi' => "Menghapus petugas (ID: {$id})",
+            'status' => 'Petugas berhasil dihapus'
         ]);
 
         Alert::success('Berhasil', 'Data berhasil dihapus');

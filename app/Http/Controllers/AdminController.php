@@ -34,7 +34,6 @@ class AdminController extends Controller
             LogAktivitas::create([
                 'user_id' => auth()->id(),
                 'aksi'    => "Melihat detail pengaduan",
-                'model'   => 'Pengaduan',
                 'status'  => 'Sukses' // jika diperlukan
             ]);
         }
@@ -59,7 +58,6 @@ class AdminController extends Controller
         LogAktivitas::create([
             'user_id' => auth()->id(),
             'status'    => "Melihat laporan pengaduan",
-            'model'   => null,
         ]);
 
         return view('pages.admin.laporan', [
@@ -76,7 +74,6 @@ class AdminController extends Controller
         LogAktivitas::create([
             'user_id' => auth()->id(),
             'status'    => "Mencetak laporan pengaduan PDF",
-            'model'   => null,
         ]);
 
         $pdf = PDF::loadview('pages.admin.pengaduan', [
