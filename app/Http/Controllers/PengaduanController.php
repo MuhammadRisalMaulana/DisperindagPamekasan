@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Pengaduan;
 use App\Models\Tanggapan;
+use Illuminate\Support\Facades\Http;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class PengaduanController extends Controller
@@ -19,22 +20,20 @@ class PengaduanController extends Controller
     public function index(Request $request)
     {
         Carbon::setLocale('id');
-        
+
         $query = Pengaduan::query();
-    
+
         if ($request->filled('name')) {
             $query->where('name', 'LIKE', '%' . $request->name . '%');
         }
-    
+
         if ($request->filled('date')) {
             $query->whereDate('created_at', $request->date);
         }
-    
+
         $items = $query->orderBy('created_at', 'DESC')->get();
-    
-        return view('pages.admin.pengaduan.index', [
-            'items' => $items
-        ]);
+
+        return view('pages.admin.pengaduan.index',['items' => $items]);
     }
 
     /**
@@ -44,7 +43,7 @@ class PengaduanController extends Controller
      */
     public function create()
     {
-        //
+        return view('pengaduan.index');
     }
 
     /**
@@ -54,83 +53,113 @@ class PengaduanController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-{
-    // Validasi data input
-    $request->validate([
-        
-        'name' => 'required|string|max:255',
-        'user_alamat' => 'required|string|max:255',
-        'user_telepon' => 'required|string|max:20',
-        'lokasi_kejadian' => 'required|string|max:255',
-        'description' => 'required|string',
-        'keterangan_tambahan' => 'nullable|string',
-        'image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Maks 2MB
-    ]);
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'user_alamat' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'lokasi_kejadian' => 'required|string|max:255',
+            'description' => 'required|string',
+            'keterangan_tambahan' => 'nullable|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
 
-    // Simpan file gambar
-    $imagePath = $request->file('image')->store('pengaduan', 'public');
-    do {
-        $token = strtoupper(Str::random(6));
-    } while (Pengaduan::where('token', $token)->exists());
+        $imagePath = $request->file('image')->store('pengaduan', 'public');
 
-    // Simpan data ke database
-    Pengaduan::create([
-        
-        'name' => $request->name,
-        'user_alamat' => $request->user_alamat,
-        'phone' => $request->user_telepon,
-        'lokasi_kejadian' => $request->lokasi_kejadian,
-        'description' => $request->description,
-        'keterangan_tambahan' => $request->keterangan_tambahan,
-        'image' => $imagePath,
-        'token' => $token,
-    ]);
+        do {
+            $token = strtoupper(Str::random(6));
+        } while (Pengaduan::where('token', $token)->exists());
 
-    // Redirect dengan pesan sukses
-    return redirect()->route('pengaduan.sukses', ['token' => $token, 'name' => $request->name]);
-}
+        // Simpan data ke database tanpa user_id
+        $pengaduan = Pengaduan::create([
+            'name' => $request->name,
+            'user_alamat' => $request->user_alamat,
+            'phone' => $request->phone,
+            'lokasi_kejadian' => $request->lokasi_kejadian,
+            'description' => $request->description,
+            'keterangan_tambahan' => $request->keterangan_tambahan,
+            'image' => $imagePath,
+            'token' => $token,
+        ]);
 
-public function sukses(Request $request)
-{
-    return view('pages.pengaduan.pengaduan_status', [
-        'token' => $request->token,
-        'name' => $request->name
-    ]);
-}
+        // Kirim ke Telegram
+        $pesan = "📩 *Laporan Baru Diterima!*\n"
+            . "Nama: {$pengaduan->name}\n"
+            . "Lokasi: {$pengaduan->lokasi_kejadian}\n"
+            . "Tanggal: " . Carbon::parse($pengaduan->created_at)->translatedFormat('l, d-m-Y H:i') . "\n"
+            . "Token: {$pengaduan->token}\n";
+        $this->sendTelegram($pesan);
 
-public function status()
-{
-    return view('pages.pengaduan.pengaduan_status');
-}
+        if (!empty($pengaduan->no_telegram)) {
+            $this->sendTelegramMessage($pengaduan->no_telegram, "Pengaduan Anda telah berhasil dilaporkan. Token Anda: {$pengaduan->token}");
+        }
 
-public function check(Request $request)
-{
-    $request->validate([
-        'token' => 'required|string|size:6',
-    ]);
+        Alert::success('Berhasil', 'Laporan Anda telah kami terima. Silakan periksa pesan di Telegram untuk melihat token yang dapat digunakan untuk memantau status pengaduan Anda.');
 
-    $pengaduan = Pengaduan::where('token', $request->token)->first();
-
-    if (!$pengaduan) {
-        return redirect()->route('pengaduan.status')->with('error', 'Token tidak ditemukan.');
+        return redirect()->route('pengaduan.sukses', ['token' => $token, 'name' => $request->name]);
     }
 
-    return view('pages.pengaduan.pengaduan_status', compact('pengaduan'))->with('status', 'Pengaduan ditemukan.');
-}
+    private function sendTelegramMessage($chat_id, $message)
+    {
+        $bot_token = env('TELEGRAM_BOT_TOKEN');
+        $url = "https://api.telegram.org/bot{$bot_token}/sendMessage";
 
+        Http::get($url, [
+            'chat_id' => $chat_id,
+            'text' => $message,
+            'parse_mode' => 'Markdown'
+        ]);
+    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    private function sendTelegram($message)
+    {
+        $bot_token = env('TELEGRAM_BOT_TOKEN');
+        $chat_id = env('TELEGRAM_ADMIN_CHAT_ID'); // Simpan CHAT_ID_ADMIN di .env
+        $message = urlencode($message);
+
+        file_get_contents("https://api.telegram.org/bot{$bot_token}/sendMessage?chat_id={$chat_id}&text={$message}&parse_mode=Markdown");
+    }
+
+    public function sukses(Request $request)
+    {
+        return view('pages.pengaduan.pengaduan_status', [
+            'token' => $request->token,
+            'name' => $request->name
+        ]);
+    }
+
+    public function status()
+    {
+        return view('pages.pengaduan.pengaduan_status');
+    }
+
+    public function check(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|string|size:6',
+        ]);
+
+        $pengaduan = Pengaduan::where('token', $request->token)->first();
+
+        if (!$pengaduan) {
+            return redirect()->route('pengaduan.status')->with('error', 'Token tidak ditemukan.');
+        }
+
+        return view('pages.pengaduan.pengaduan_status', compact('pengaduan'))->with('status', 'Pengaduan ditemukan.');
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $pengaduan = Pengaduan::findOrFail($id);
+        $pengaduan->status = $request->status;
+        $pengaduan->save();
+
+        return back()->with('success', 'Status diperbarui');
+    }
+
     public function show($id)
     {
-        $item = Pengaduan::with([
-            'details', 'user'
-        ])->findOrFail($id);
-
+        $item = Pengaduan::with(['details', 'user'])->findOrFail($id);
         $tangap = Tanggapan::where('pengaduan_id', $id)->first();
 
         return view('pages.admin.pengaduan.detail', [
@@ -141,51 +170,28 @@ public function check(Request $request)
 
     public function riwayat()
     {
-        // Mendapatkan pengaduan yang terkait dengan user yang sedang login
-        $pengaduans = Pengaduan::where('user_id', auth()->id())->get();
-        
-        // Mengirimkan data pengaduan ke view riwayat
-        return view('riwayat-pengaduan', compact('pengaduans'));
+        $pengaduans = Pengaduan::orderBy('created_at', 'desc')->get();
+        return view('pages.pengaduan.riwayat', compact('pengaduans'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-
-
-        $status->update($data);
-        return redirect('admin/pengaduans');
+        $pengaduan = Pengaduan::findOrFail($id);
+        $pengaduan->update($request->all());
+        return redirect()->route('pengaduan.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        $pengaduan = Pengaduan::find($id);
+        $pengaduan = Pengaduan::findOrFail($id);
         $pengaduan->delete();
 
-        Alert::success('Berhasil', 'Pengaduan telah di hapus');
-        return redirect('admin/pengaduans');
+        Alert::success('Berhasil', 'Pengaduan telah dihapus');
+        return redirect()->route('pengaduans.index');
     }
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Pengaduan;
+use App\Models\LogAktivitas;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +32,12 @@ class PetugasController extends Controller
         $data = DB::table('users')->whereIn('roles', ['PETUGAS', 'ADMIN'])->get();
         $jumlahAdmin = User::where('roles', 'ADMIN')->count();
         $jumlahPetugas = User::where('roles', 'PETUGAS')->count();
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aksi' => "Akses halaman daftar petugas",
+            'status' => 'Melihat data petugas'
+        ]);
 
         return view('pages.admin.petugas.index', [
             'data' => $data,
@@ -77,6 +85,12 @@ class PetugasController extends Controller
 
         ]);
 
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aksi' => "Menambahkan petugas baru (ID: {$user->id})",
+            'status' => 'Petugas berhasil ditambahkan'
+        ]);
+
         Alert::success('Berhasil', 'Petugas baru ditambahkan');
         return redirect('admin/petugas');
     }
@@ -85,51 +99,55 @@ class PetugasController extends Controller
         // Ambil semua data pengaduan tanpa filter user
         $pengaduan = Pengaduan::all();
 
+        // Log aktivitas lihat riwayat pengaduan
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aksi' => "Akses halaman riwayat pengaduan",
+            'status' => 'Melihat semua data pengaduan'
+        ]);
+
+
         // Kirim ke view
         return view('riwayat_pengaduan', compact('pengaduan'));
     }
 
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        //
+        $petugas = User::findOrFail($id);
+        return view('pages.admin.petugas.edit', compact('petugas'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'alamat' => 'required|string',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'phone' => 'required|string|max:15',
+            'password' => 'nullable|string|confirmed|min:8',
+        ]);
+
+        $user->update([
+            'alamat' => $request->alamat,
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'roles' => $request->roles,
+            'password' => $request->password ? \Hash::make($request->password) : $user->password,
+        ]);
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aksi' => "Mengedit petugas (ID: {$user->id})",
+            'status' => 'Petugas berhasil diupdate'
+        ]);
+
+        Alert::success('Berhasil', 'Data petugas berhasil diupdate');
+        return redirect()->route('petugas.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $user = User::find($id);
@@ -148,6 +166,13 @@ class PetugasController extends Controller
         }
 
         $user->delete();
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aksi' => "Menghapus petugas (ID: {$id})",
+            'status' => 'Petugas berhasil dihapus'
+        ]);
+
         Alert::success('Berhasil', 'Data berhasil dihapus');
         return redirect()->route('petugas.index');
     }

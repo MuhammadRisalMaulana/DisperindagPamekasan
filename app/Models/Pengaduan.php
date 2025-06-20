@@ -21,6 +21,7 @@ class Pengaduan extends Model
         'lokasi_kejadian',
         'keterangan_tambahan',
         'image',
+        'status',
         'token',
     ];
 
@@ -30,29 +31,37 @@ class Pengaduan extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function details() {
-        return $this->hasMany(Pengaduan::class, 'id', 'id');
-    }
+public function details() {
+    return $this->hasMany(Pengaduan::class, 'id', 'id');
+}
 
-    public function phones() {
-        return $this->belongsTo(User::class);
-    }
+public function phones() {
+    return $this->belongsTo(User::class);
+}
+
 
     public function tanggapans() {
-    return $this->belongsTo(Pengaduan::class, 'id', 'id');
-    }
+    return $this->hasMany(Tanggapan::class);
+}
+
 
     public function tanggapan() {
     return $this->hasOne(Tanggapan::class);
-    }
+}
 
-    public function status() {
-    return $this->belongsTo(Tanggapan::class, 'status_id','status');
-    }
+// public function status()
+// {
+//     return $this->belongsTo(Status::class, 'status_id');
+// }
+
 
     protected static function booted()
     {
         Carbon::setLocale('id');
     }
     
+    public function getCreatedAtIndoAttribute()
+{
+    return Carbon::parse($this->created_at)->translatedFormat('d F Y H:i');
+}
 }

@@ -29,8 +29,9 @@
       <a class="inline-flex items-center text-sm mr-5 font-semibold transition-colors duration-150 "
         href="{{ url('/pengaduan/status')}} ">
 
-        <span class="ml-4">Riwayat Pengaduan</span>
+        <span class="ml-4">Cek Pengaduan</span>
       </a>
+      
       {{-- <div @click.away="open = false" class="relative" x-data="{ open: false }">
         <button @click="open = !open"
           class="inline-flex items-center  text-sm mr-5 font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100">
