@@ -30,4 +30,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'fonnte' => [
+        'token' => env('FONNTE_API_KEY'),
+        'device' => env('FONNTE_DEVICE_ID'),
+    ],
+    
 ];

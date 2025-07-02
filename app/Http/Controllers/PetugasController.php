@@ -33,12 +33,6 @@ class PetugasController extends Controller
         $jumlahAdmin = User::where('roles', 'ADMIN')->count();
         $jumlahPetugas = User::where('roles', 'PETUGAS')->count();
 
-        LogAktivitas::create([
-            'user_id' => auth()->id(),
-            'aksi' => "Akses halaman daftar petugas",
-            'status' => 'Melihat data petugas'
-        ]);
-
         return view('pages.admin.petugas.index', [
             'data' => $data,
             'jumlahAdmin' => $jumlahAdmin,
@@ -67,7 +61,7 @@ class PetugasController extends Controller
         $request->validate([
             'alamat' => 'required|string',
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|email|unique:users,email,' . $id,
             'phone' => 'required|string|max:15',
             'password' => 'required|string|confirmed|min:8',
 
@@ -117,6 +111,35 @@ class PetugasController extends Controller
         return view('pages.admin.petugas.edit', compact('petugas'));
     }
 
+    public function destroy($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            Alert::error('Error', 'Petugas tidak ditemukan');
+            return back();
+        }
+
+        if (
+            ($user->roles === 'ADMIN' && User::where('roles', 'ADMIN')->count() <= 1) ||
+            ($user->roles === 'PETUGAS' && User::where('roles', 'PETUGAS')->count() <= 1)
+        ) {
+            Alert::warning('Peringatan', 'Harus ada minimal 1 admin atau petugas.');
+            return back();
+        }
+
+        $user->delete();
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aksi' => "Menghapus petugas (ID: {$id})",
+            'status' => 'Petugas berhasil dihapus'
+        ]);
+
+        Alert::success('Berhasil', 'Data berhasil dihapus');
+        return redirect()->route('petugas.index');
+    }
+
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -145,35 +168,6 @@ class PetugasController extends Controller
         ]);
 
         Alert::success('Berhasil', 'Data petugas berhasil diupdate');
-        return redirect()->route('petugas.index');
-    }
-
-    public function destroy($id)
-    {
-        $user = User::find($id);
-
-        if (!$user) {
-            Alert::error('Error', 'Petugas tidak ditemukan');
-            return back();
-        }
-
-        if (
-            ($user->roles === 'ADMIN' && User::where('roles', 'ADMIN')->count() <= 1) ||
-            ($user->roles === 'PETUGAS' && User::where('roles', 'PETUGAS')->count() <= 1)
-        ) {
-            Alert::warning('Peringatan', 'Harus ada minimal 1 admin atau petugas.');
-            return back();
-        }
-
-        $user->delete();
-
-        LogAktivitas::create([
-            'user_id' => auth()->id(),
-            'aksi' => "Menghapus petugas (ID: {$id})",
-            'status' => 'Petugas berhasil dihapus'
-        ]);
-
-        Alert::success('Berhasil', 'Data berhasil dihapus');
         return redirect()->route('petugas.index');
     }
 }

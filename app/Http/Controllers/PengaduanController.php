@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Pengaduan;
 use App\Models\Tanggapan;
+use App\Models\LogAktivitas;
 use Illuminate\Support\Facades\Http;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -27,13 +28,14 @@ class PengaduanController extends Controller
             $query->where('name', 'LIKE', '%' . $request->name . '%');
         }
 
-        if ($request->filled('date')) {
-            $query->whereDate('created_at', $request->date);
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
         }
 
-        $items = $query->orderBy('created_at', 'DESC')->get();
+        // ✅ Gunakan paginate agar mendukung withQueryString() dan links()
+        $items = $query->orderBy('created_at', 'DESC')->paginate(10);
 
-        return view('pages.admin.pengaduan.index',['items' => $items]);
+        return view('pages.admin.pengaduan.index', ['items' => $items]);
     }
 
     /**
@@ -57,12 +59,16 @@ class PengaduanController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'user_alamat' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => 'required|string|regex:/^[0-9\-\+]{9,15}$/',
             'lokasi_kejadian' => 'required|string|max:255',
             'description' => 'required|string',
             'keterangan_tambahan' => 'nullable|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:10240',
         ]);
+
+        if (!$request->hasFile('image') || !$request->file('image')->isValid()) {
+            return back()->withErrors(['image' => 'File gagal diunggah.'])->withInput();
+        }
 
         $imagePath = $request->file('image')->store('pengaduan', 'public');
 
@@ -82,43 +88,84 @@ class PengaduanController extends Controller
             'token' => $token,
         ]);
 
-        // Kirim ke Telegram
-        $pesan = "📩 *Laporan Baru Diterima!*\n"
-            . "Nama: {$pengaduan->name}\n"
-            . "Lokasi: {$pengaduan->lokasi_kejadian}\n"
-            . "Tanggal: " . Carbon::parse($pengaduan->created_at)->translatedFormat('l, d-m-Y H:i') . "\n"
-            . "Token: {$pengaduan->token}\n";
-        $this->sendTelegram($pesan);
+        // // Kirim ke Telegram (opsional)
+        // $pesan = "📩 *Laporan Baru Diterima!*\n"
+        //     . "Nama: {$pengaduan->name}\n"
+        //     . "Lokasi: {$pengaduan->lokasi_kejadian}\n"
+        //     . "Tanggal: " . Carbon::parse($pengaduan->created_at)->translatedFormat('l, d-m-Y H:i') . "\n"
+        //     . "Token: {$pengaduan->token}\n";
+        // $this->sendTelegram($pesan);
 
-        if (!empty($pengaduan->no_telegram)) {
-            $this->sendTelegramMessage($pengaduan->no_telegram, "Pengaduan Anda telah berhasil dilaporkan. Token Anda: {$pengaduan->token}");
+        // Kirim Token via WhatsApp
+        $formattedPhone = preg_replace('/^0/', '62', $request->phone);
+        $message = "📩 *Pengaduan Diterima!*\n"
+            . "Halo *{$request->name}*,\n"
+            . "Pengaduan Anda telah kami terima.\n"
+            . "Lokasi Pengaduan : {$request->lokasi_kejadian}\n"
+            . "Token Anda : *{$token}*";
+
+        $response = $this->sendWhatsApp($formattedPhone, $message);
+
+        if (isset($response['status']) && $response['status'] === 'success') {
+            Alert::success('Berhasil', 'Laporan Anda telah kami terima. Silakan cek pesan WhatsApp Anda.');
+        } else {
+            Alert::error('Gagal', 'Pesan WhatsApp tidak terkirim. Silakan coba lagi.');
+            // Optional: log error
+            \Log::error('WhatsApp Error:', ['response' => $response]);
         }
 
-        Alert::success('Berhasil', 'Laporan Anda telah kami terima. Silakan periksa pesan di Telegram untuk melihat token yang dapat digunakan untuk memantau status pengaduan Anda.');
+        // Tampilkan notifikasi web
+        Alert::success('Berhasil', 'Laporan Anda telah kami terima. Silakan cek pesan WhatsApp Anda.');
 
         return redirect()->route('pengaduan.sukses', ['token' => $token, 'name' => $request->name]);
     }
 
-    private function sendTelegramMessage($chat_id, $message)
+    public function show($id)
     {
-        $bot_token = env('TELEGRAM_BOT_TOKEN');
-        $url = "https://api.telegram.org/bot{$bot_token}/sendMessage";
+        $item = Pengaduan::with(['details', 'user'])->findOrFail($id);
+        $tangap = Tanggapan::with('user')->where('pengaduan_id', $id)->first();
 
-        Http::get($url, [
-            'chat_id' => $chat_id,
-            'text' => $message,
-            'parse_mode' => 'Markdown'
+
+        return view('pages.admin.pengaduan.detail', [
+            'item' => $item,
+            'tangap' => $tangap
         ]);
     }
 
-    private function sendTelegram($message)
+    public function riwayat()
     {
-        $bot_token = env('TELEGRAM_BOT_TOKEN');
-        $chat_id = env('TELEGRAM_ADMIN_CHAT_ID'); // Simpan CHAT_ID_ADMIN di .env
-        $message = urlencode($message);
-
-        file_get_contents("https://api.telegram.org/bot{$bot_token}/sendMessage?chat_id={$chat_id}&text={$message}&parse_mode=Markdown");
+        $pengaduans = Pengaduan::orderBy('created_at', 'desc')->get();
+        return view('pages.pengaduan.riwayat', compact('pengaduans'));
     }
+
+    public function edit($id)
+    {
+        //
+    }
+
+    public function update(Request $request, $id)
+    {
+        $pengaduan = Pengaduan::findOrFail($id);
+        $pengaduan->update($request->all());
+        return redirect()->route('pengaduan.index');
+    }
+
+    public function destroy($id)
+    {
+        $pengaduan = Pengaduan::findOrFail($id);
+        $pengaduan->delete();
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aksi' => 'Menghapus pengaduan',
+            'status' => 'Token: ' . $pengaduan->token . ', Nama: ' . $pengaduan->name,
+        ]);
+
+
+        Alert::success('Berhasil', 'Pengaduan telah dihapus');
+        return redirect()->route('pengaduans.index');
+    }
+
 
     public function sukses(Request $request)
     {
@@ -154,44 +201,35 @@ class PengaduanController extends Controller
         $pengaduan->status = $request->status;
         $pengaduan->save();
 
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aksi' => 'Memperbarui status pengaduan',
+            'status' => 'Token: ' . $pengaduan->token . ', Status baru: ' . $request->status,
+        ]);
+
+
         return back()->with('success', 'Status diperbarui');
     }
-
-    public function show($id)
+    private function sendWhatsApp($phone, $message)
     {
-        $item = Pengaduan::with(['details', 'user'])->findOrFail($id);
-        $tangap = Tanggapan::where('pengaduan_id', $id)->first();
+        $response = Http::withHeaders([
+            'Authorization' => env('FONNTE_API_KEY'),
+        ])->asForm()->post('https://api.fonnte.com/send', [
+                    'target' => $phone,
+                    'message' => $message,
+                    'device' => env('FONNTE_DEVICE_ID'),
+                ]);
 
-        return view('pages.admin.pengaduan.detail', [
-            'item' => $item,
-            'tangap' => $tangap
-        ]);
+
+        \Log::info("Target WA: $phone");
+        \Log::info("Pesan WA: $message");
+        \Log::info("Respons Fonnte: " . $response->body());
+
+        if ($response->failed()) {
+            \Log::error('Gagal kirim WA ke ' . $phone . '. Respon: ' . $response->body());
+        }
+
+        return $response;
     }
 
-    public function riwayat()
-    {
-        $pengaduans = Pengaduan::orderBy('created_at', 'desc')->get();
-        return view('pages.pengaduan.riwayat', compact('pengaduans'));
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update(Request $request, $id)
-    {
-        $pengaduan = Pengaduan::findOrFail($id);
-        $pengaduan->update($request->all());
-        return redirect()->route('pengaduan.index');
-    }
-
-    public function destroy($id)
-    {
-        $pengaduan = Pengaduan::findOrFail($id);
-        $pengaduan->delete();
-
-        Alert::success('Berhasil', 'Pengaduan telah dihapus');
-        return redirect()->route('pengaduans.index');
-    }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Carbon\Carbon;
 use App\Models\Pengaduan;
 use App\Models\Tanggapan;
@@ -15,7 +15,9 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
-    public function __invoke() {}
+    public function __invoke()
+    {
+    }
 
     public function index($id)
     {
@@ -29,14 +31,6 @@ class AdminController extends Controller
             'item' => $item
         ]);
 
-        // Log aktivitas
-        if (auth()->check() && auth()->user()->role === 'petugas') {
-            LogAktivitas::create([
-                'user_id' => auth()->id(),
-                'aksi'    => "Melihat detail pengaduan",
-                'status'  => 'Sukses' // jika diperlukan
-            ]);
-        }
     }
 
     public function laporan(Request $request)
@@ -53,34 +47,48 @@ class AdminController extends Controller
             $query->whereDate('created_at', $request->date);
         }
 
-        $pengaduan = $query->orderBy('created_at', 'DESC')->get();
+        if ($request->filled('status')) {
+        $query->where('status', $request->status); // tambahkan ini
+    }
 
-        LogAktivitas::create([
-            'user_id' => auth()->id(),
-            'status'    => "Melihat laporan pengaduan",
-        ]);
+        $pengaduan = $query->orderBy('created_at', 'DESC')->get();
 
         return view('pages.admin.laporan', [
             'pengaduan' => $pengaduan
         ]);
     }
 
-    public function cetak()
+       public function cetak(Request $request)
     {
+        $query = Pengaduan::query();
 
-        $pengaduan = Pengaduan::orderBy('created_at', 'DESC')->get();
+        if ($request->filled('name')) {
+            $query->where('name', 'LIKE', '%' . $request->name . '%');
+        }
 
-        // Log aktivitas
+        if ($request->filled('date')) {
+            $query->whereDate('created_at', $request->date);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $pengaduan = $query->orderBy('created_at', 'DESC')->get();
+
         LogAktivitas::create([
             'user_id' => auth()->id(),
-            'status'    => "Mencetak laporan pengaduan PDF",
+            'status' => "Mencetak laporan pengaduan PDF",
         ]);
 
-        $pdf = PDF::loadview('pages.admin.pengaduan', [
-            'pengaduan' => $pengaduan
+        $pdf = PDF::loadView('pages.admin.pengaduan', [
+            'pengaduan' => $pengaduan,
+            'request' => $request
         ]);
+
         return $pdf->download('laporan.pdf');
     }
+
 
     public function pdf($id)
     {
@@ -104,3 +112,4 @@ class AdminController extends Controller
         return view('pages.admin.log_aktivitas.index', compact('logs'));
     }
 }
+

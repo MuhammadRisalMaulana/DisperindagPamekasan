@@ -21,20 +21,66 @@
                             </ul>
                         </div>
                     @endif
-                    <div class="flex justify-between mb-4">
-                        <form method="GET" action="{{ route('pengaduans.index') }}" class="flex space-x-4">
-                            <input type="text" name="name" placeholder="Cari Nama" value="{{ request('name') }}"
-                                class="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
 
-                            <input type="date" name="date" value="{{ request('date') }}"
-                                class="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
+                    <div class="bg-white p-6 rounded-md border border-gray-300 shadow mb-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4 text-center uppercase">Filter Data Pengaduan
+                            Masyarakat</h4>
 
-                            <button type="submit"
-                                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none">
-                                Cari
-                            </button>
+                        <form method="GET" action="{{ route('pengaduans.index') }}">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                                {{-- Input Nama Pelapor --}}
+                                <div>
+                                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama
+                                        Pelapor</label>
+                                    <input type="text" id="name" name="name" placeholder="Masukkan nama"
+                                        value="{{ request('name') }}"
+                                        class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                </div>
+
+                                {{-- Input Tanggal Pengaduan --}}
+                                <div>
+                                    <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Tanggal
+                                        Pengaduan</label>
+                                    <input type="date" id="date" name="date" value="{{ request('date') }}"
+                                        class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                </div>
+
+                                {{-- Dropdown Status --}}
+                                <div>
+                                    <label for="status"
+                                        class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                    <select id="status" name="status"
+                                        class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                        <option value="">Semua Status</option>
+                                        <option value="Belum di Proses"
+                                            {{ request('status') == 'Belum di Proses' ? 'selected' : '' }}>
+                                            Belum di Proses</option>
+                                        <option value="Sedang di Proses"
+                                            {{ request('status') == 'Sedang di Proses' ? 'selected' : '' }}>
+                                            Sedang di Proses</option>
+                                        <option value="Selesai" {{ request('status') == 'Selesai' ? 'selected' : '' }}>
+                                            Selesai</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            {{-- Tombol Aksi --}}
+                            <div class="flex justify-end gap-3 mt-6">
+                                <button type="submit"
+                                    class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-md transition">
+                                    Cari
+                                </button>
+                                <a href="{{ route('pengaduans.index') }}"
+                                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm font-medium px-5 py-2 rounded-md transition">
+                                    Reset
+                                </a>
+                            </div>
                         </form>
                     </div>
+
+
+
                     <table class="w-full whitespace-no-wrap">
                         <thead>
                             <tr
@@ -86,37 +132,46 @@
                                             </span>
                                         </td>
                                     @endif
-                                    <td class="px-4 py-3">
-                                        <div class="flex items-center space-x-4">
-                                            <!-- Tombol Detail -->
-                                            <a href="{{ route('pengaduans.show', $item->id) }}"
-                                                class="flex items-center p-2 rounded-md text-blue-500 hover:bg-blue-100 transition duration-300">
-                                                <svg class="w-5 h-5" aria-hidden="true" fill="none" viewBox="0 0 24 24"
-                                                    stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    <td class="px-4 py-3 text-sm flex space-x-2">
+                                        <!-- Detail -->
+                                        <a href="{{ route('pengaduans.show', $item->id) }}"
+                                            class="p-2 text-blue-600 rounded hover:bg-blue-100">
+                                            <!-- Eye icon -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                fill="none" viewBox="0 0 24 24">
+                                                <path
+                                                    d="M12 4C7 4 4 7 4 12C4 17 7 20 12 20C17 20 20 17 20 12C20 7 17 4 12 4Z"
+                                                    stroke="#2563eb" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <circle cx="12" cy="12" r="3" stroke="#2563eb"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </a>
+
+                                        <!-- Delete -->
+                                        <form action="{{ route('pengaduans.destroy', $item->id) }}" method="POST"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengaduan ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="p-2 text-red-600 rounded hover:bg-red-100">
+                                                <!-- Trash icon -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                    fill="none" viewBox="0 0 24 24">
+                                                    <path d="M4 7H20" stroke="#dc2626" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path d="M10 11V17" stroke="#dc2626" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path d="M14 11V17" stroke="#dc2626" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path d="M5 7V19C5 20.105 5.895 21 7 21H17C18.105 21 19 20.105 19 19V7"
+                                                        stroke="#dc2626" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path d="M10 4H14" stroke="#dc2626" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
                                                 </svg>
-                                            </a>
-
-                                            <!-- Tombol Delete -->
-                                            <form action="{{ route('pengaduans.destroy', $item->id) }}" method="POST">
-                                                @csrf
-                                                @method('delete')
-                                                <button onclick="return confirm('Are you sure you want to delete this?')"
-                                                    class="flex items-center p-2 rounded-md text-red-500 hover:bg-orange-100 transition duration-300">
-                                                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd"
-                                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                                            clip-rule="evenodd"></path>
-                                                    </svg>
-                                                </button>
-                                            </form>
-                                        </div>
+                                            </button>
+                                        </form>
                                     </td>
-
                                 </tr>
                             @empty
                                 <tr>
@@ -127,6 +182,18 @@
                             @endforelse
                         </tbody>
                     </table>
+                    <div class="px-4 py-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+                        <div class="flex flex-col items-center justify-between space-y-4 md:flex-row">
+                            <span class="text-sm text-gray-700 dark:text-gray-300">
+                                Menampilkan {{ $items->firstItem() }} - {{ $items->lastItem() }} dari
+                                {{ $items->total() }} data
+                            </span>
+
+                            <div>
+                                {{ $items->links('vendor.pagination.tailwind_next_back') }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

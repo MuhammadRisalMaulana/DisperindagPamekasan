@@ -1,4 +1,4 @@
-@extends('layouts.masyarakat')
+{{-- @extends('layouts.masyarakat')
 
 @section('title')
 MADUKONCER | Data Pengaduan
@@ -99,4 +99,4 @@ MADUKONCER | Data Pengaduan
 
   </div>
 </main>
-@endsection
+@endsection --}}

@@ -74,7 +74,7 @@
                     PAMEKASAN</p>
                 <a href="<?php echo e(url('pengaduan')); ?>"
                     class="bg-green-500 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded shadow-lg transition">
-                    PENGADUAN KONSUMEN
+                    LAPORKAN PENGADUAN
                 </a>
             </div>
             <div class="w-full md:w-3/5 text-center">

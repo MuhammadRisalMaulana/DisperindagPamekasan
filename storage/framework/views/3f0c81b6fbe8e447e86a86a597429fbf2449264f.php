@@ -8,6 +8,15 @@
             <h2 class="my-6 text-2xl text-center font-semibold text-gray-700 dark:text-gray-200">
                 Berikan Tanggapan
             </h2>
+            <?php if($errors->any()): ?>
+                <div class="mb-4 px-4 py-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                    <ul class="text-sm">
+                        <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <li>• <?php echo e($error); ?></li>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
             <form action="<?php echo e(route('tanggapan.store')); ?> " method="POST" enctype="multipart/form-data">
                 <?php echo csrf_field(); ?>
                 <input type="hidden" name="pengaduan_id" value="<?php echo e($item->id); ?> ">
@@ -40,7 +49,6 @@
                             <option value="Belum di Proses">Belum di Proses</option>
                             <option value="Sedang di Proses">Sedang di Proses</option>
                             <option value="Selesai">Selesai</option>
-
                         </select>
                     </label>
 
@@ -49,6 +57,11 @@
                         class="mt-4 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                         Tanggapi
                     </button>
+                    
+                    <a href="<?php echo e(url()->previous()); ?>"
+                        class="mt-4 ml-4 inline-block text-sm text-blue-600 hover:underline dark:text-blue-400">
+                        ← Kembali ke Detail
+                    </a>
                 </div>
             </form>
         </div>

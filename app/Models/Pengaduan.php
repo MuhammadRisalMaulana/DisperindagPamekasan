@@ -31,25 +31,29 @@ class Pengaduan extends Model
         return $this->belongsTo(User::class);
     }
 
-public function details() {
-    return $this->hasMany(Pengaduan::class, 'id', 'id');
-}
+    public function details()
+    {
+        return $this->hasMany(Pengaduan::class, 'id', 'id');
+    }
 
-public function phones() {
-    return $this->belongsTo(User::class);
-}
-
-
-    public function tanggapans() {
-    return $this->hasMany(Tanggapan::class);
-}
+    public function phones()
+    {
+        return $this->belongsTo(User::class);
+    }
 
 
-    public function tanggapan() {
-    return $this->hasOne(Tanggapan::class);
-}
+    public function tanggapans()
+    {
+        return $this->hasMany(Tanggapan::class);
+    }
 
-// public function status()
+
+    public function tanggapan()
+    {
+        return $this->hasOne(Tanggapan::class);
+    }
+
+    // public function status()
 // {
 //     return $this->belongsTo(Status::class, 'status_id');
 // }
@@ -59,9 +63,9 @@ public function phones() {
     {
         Carbon::setLocale('id');
     }
-    
+
     public function getCreatedAtIndoAttribute()
-{
-    return Carbon::parse($this->created_at)->translatedFormat('d F Y H:i');
-}
+    {
+        return Carbon::parse($this->created_at)->translatedFormat('d F Y H:i');
+    }
 }

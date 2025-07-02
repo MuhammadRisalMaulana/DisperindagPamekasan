@@ -70,11 +70,18 @@
         }
 
         img {
-            max-height: 150px;
+            max-height: 180px;
             max-width: 100%;
             object-fit: contain;
             display: block;
             margin: auto;
+        }
+
+        .petugas {
+            margin-top: 25px;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-left: 4px solid #2ecc71;
         }
     </style>
 </head>
@@ -90,7 +97,9 @@
     <hr class="solid">
 
     <div class="section-title">Informasi Waktu</div>
-    <div class="info">Tanggal: {{ \Carbon\Carbon::parse($pengaduan->created_at)->locale('id')->isoFormat('dddd, D MMMM YYYY - HH:mm:ss') }}</div>
+    <div class="info">Tanggal:
+        {{ \Carbon\Carbon::parse($pengaduan->created_at)->locale('id')->isoFormat('dddd, D MMMM YYYY - HH:mm:ss') }}
+    </div>
 
     <div class="section-title">Data Pelapor</div>
     <div class="info">Nama: {{ $pengaduan->name }}</div>
@@ -98,29 +107,37 @@
     <div class="info">No. Telepon: {{ $pengaduan->phone }}</div>
 
     <div class="section-title">Detail Pengaduan</div>
-    <div class="info">Lokasi Kejadian: {{ $pengaduan->lokasi_kejadian }}</div>
-    <div class="info">Keterangan Tambahan: {{ $pengaduan->keterangan_tambahan ?? 'Tidak ada keterangan tambahan' }}</div>
 
     <table>
         <thead>
             <tr>
-                <th>Foto Pengaduan</th>
-                <th>Deskripsi Pengaduan</th>
+                <th colspan="2">Foto Pengaduan</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>
-                    @if($pengaduan->image)
+                <td colspan="2" style="text-align: center">
+                    @if ($pengaduan->image)
                         <img src="{{ public_path('storage/' . $pengaduan->image) }}" alt="Foto Pengaduan">
                     @else
                         Tidak ada gambar
                     @endif
                 </td>
-                <td>{{ $pengaduan->description }}</td>
+            </tr>
+            <tr>
+                <td><strong>Deskripsi Pengaduan:</strong><br>{{ $pengaduan->description }}</td>
+                <td><strong>Keterangan
+                        Tambahan:</strong><br>{{ $pengaduan->keterangan_tambahan ?? 'Tidak ada keterangan tambahan' }}
+                </td>
             </tr>
         </tbody>
     </table>
+
+    @if ($pengaduan->tanggapan && $pengaduan->tanggapan->user)
+        <div class="petugas">
+            <strong>Petugas yang Menangani Pengaduan:</strong> {{ $pengaduan->tanggapan->user->name }}
+        </div>
+    @endif
 
 </body>
 

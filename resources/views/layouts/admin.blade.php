@@ -25,6 +25,7 @@
   </div>
   @include('sweetalert::alert')
   @include('includes.admin.script')
+  @stack('scripts')
 </body>
 
 </html>

@@ -6,46 +6,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Laporan Pengaduan | DISPERINDAG PAMEKASAN</title>
   <style>
+    @page {
+      size: A4;
+      margin: 30px 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f9fbfc;
       color: #333;
       margin: 0;
-      padding: 20px;
+      padding: 0;
     }
 
     .container {
-      max-width: 960px;
-      margin: 0 auto;
-      background: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      padding: 30px 40px;
-      border-radius: 8px;
+      width: 100%;
+      padding: 10px 20px;
     }
 
     .title {
       text-align: center;
-      margin-bottom: 30px;
-      color: #2c3e50;
+      margin-bottom: 10px;
     }
 
     .title h4 {
-      margin-bottom: 5px;
-      font-weight: 700;
-      font-size: 1.8rem;
+      margin: 0;
+      font-weight: bold;
+      font-size: 1.2rem;
     }
 
     .title h5 {
-      margin: 0;
-      font-weight: 500;
-      font-size: 1.1rem;
-      color: #34495e;
+      margin: 2px 0;
+      font-weight: normal;
+      font-size: 0.95rem;
+    }
+
+    .timestamp {
+      text-align: right;
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 5px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
+      table-layout: fixed;
     }
 
     thead tr {
@@ -54,27 +64,30 @@
     }
 
     th, td {
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      font-size: 14px;
-      vertical-align: middle;
+      padding: 6px 8px;
+      border: 1px solid #ccc;
+      font-size: 11px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
     th {
       text-align: center;
-      font-weight: 600;
+    }
+
+    td {
+      vertical-align: top;
+    }
+
+    td:nth-child(4) {
+      text-align: justify;
     }
 
     tbody tr:nth-child(even) {
-      background-color: #f2f6fc;
+      background-color: #f4f8fb;
     }
 
-    tbody tr:hover {
-      background-color: #d0e4ff;
-      transition: background-color 0.3s ease;
-    }
-
-    td.text-center {
+    .text-center {
       text-align: center;
     }
   </style>
@@ -88,28 +101,36 @@
       <h5>KABUPATEN PAMEKASAN</h5>
     </div>
 
+    <div class="timestamp">
+      Dicetak pada: {{ \Carbon\Carbon::now()->locale('id')->isoFormat('D MMMM Y, HH:mm') }}
+    </div>
+
     <table>
       <thead>
         <tr>
           <th style="width: 5%;">No</th>
-          <th>Nama</th>
-          <th>Alamat</th>
-          <th>Pengaduan</th>
-          <th>Tanggal</th>
-          <th>Status</th>
+          <th style="width: 15%;">Nama</th>
+          <th style="width: 25%;">Alamat</th>
+          <th style="width: 30%;">Pengaduan</th>
+          <th style="width: 20%;">Tanggal</th>
+          <th style="width: 15%;">Status</th>
         </tr>
       </thead>
       <tbody>
-        @foreach ($pengaduan as $item)
+        @forelse ($pengaduan as $item)
         <tr>
           <td class="text-center">{{ $loop->iteration }}</td>
           <td>{{ $item->name }}</td>
           <td>{{ $item->user_alamat }}</td>
           <td>{{ $item->description }}</td>
-          <td>{{ $item->created_at->locale('id')->isoFormat('D MMMM YYYY, HH:mm') }}</td>
+          <td>{{ \Carbon\Carbon::parse($item->created_at)->locale('id')->isoFormat('D MMMM Y, HH:mm') }}</td>
           <td class="text-center">{{ ucfirst($item->status) }}</td>
         </tr>
-        @endforeach
+        @empty
+        <tr>
+          <td colspan="6" class="text-center">Tidak ada data pengaduan.</td>
+        </tr>
+        @endforelse
       </tbody>
     </table>
   </div>
