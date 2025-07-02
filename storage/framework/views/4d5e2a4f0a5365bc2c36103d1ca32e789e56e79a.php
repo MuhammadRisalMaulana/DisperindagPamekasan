@@ -35,7 +35,7 @@
                                 <th class="px-4 py-3">No. Hp</th>
                                 <th class="px-4 py-3">Email</th>
                                 <th class="px-4 py-3">Role</th>
-                                <th class="px-4 py-3">Aksi</th>
+                                <td class="flex items-center gap-2 px-4 py-3">
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
@@ -61,23 +61,47 @@
                                         <?php echo e($petugas->roles); ?>
 
                                     </td>
-                                    <td class="flex items-center gap-2 px-4 py-3">
+                                    <td class="flex items-center px-4 py-3 space-x-2">
+                                        <!-- Edit -->
                                         <a href="<?php echo e(route('petugas.edit', $petugas->id)); ?>"
-                                            class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600">
-                                            Edit
+                                            class="p-2 text-blue-600 rounded hover:bg-blue-100">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                fill="none" viewBox="0 0 24 24">
+                                                <path d="M17 3C17 3 19 5 21 7C21 7 20 8 19 9L15 5C16 4 17 3 17 3Z"
+                                                    stroke="#3b82f6" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path d="M15 5L5 15V19H9L19 9" stroke="#3b82f6" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
                                         </a>
+
+                                        <!-- Delete -->
                                         <?php if(!($petugas->roles === 'ADMIN' && $jumlahAdmin <= 1) && !($petugas->roles === 'PETUGAS' && $jumlahPetugas <= 1)): ?>
                                             <form action="<?php echo e(route('petugas.destroy', $petugas->id)); ?>" method="POST"
-                                                style="display: inline;">
+                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus petugas ini?');">
                                                 <?php echo csrf_field(); ?>
                                                 <?php echo method_field('DELETE'); ?>
-                                                <button type="submit"
-                                                    class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700">
-                                                    Hapus
+                                                <button type="submit" class="p-2 text-red-600 rounded hover:bg-red-100">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                        fill="none" viewBox="0 0 24 24">
+                                                        <path d="M4 7H20" stroke="#dc2626" stroke-width="2"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M10 11V17" stroke="#dc2626" stroke-width="2"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M14 11V17" stroke="#dc2626" stroke-width="2"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path
+                                                            d="M5 7V19C5 20.105 5.895 21 7 21H17C18.105 21 19 20.105 19 19V7"
+                                                            stroke="#dc2626" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path d="M10 4H14" stroke="#dc2626" stroke-width="2"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
                                                 </button>
                                             </form>
                                         <?php endif; ?>
                                     </td>
+
 
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

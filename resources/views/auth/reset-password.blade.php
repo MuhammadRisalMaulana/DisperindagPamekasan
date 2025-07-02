@@ -1,4 +1,4 @@
-<x-guest-layout>
+{{-- <x-guest-layout>
     <div class="min-h-screen flex items-center justify-center px-4 py-12"
          style="background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);">
 
@@ -66,4 +66,4 @@
             </form>
         </div>
     </div>
-</x-guest-layout>
+</x-guest-layout> --}}

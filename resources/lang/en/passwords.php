@@ -12,11 +12,10 @@ return [
     | has failed, such as for an invalid token or invalid new password.
     |
     */
-
-    'reset' => 'Your password has been reset!',
-    'sent' => 'We have emailed your password reset link!',
-    'throttled' => 'Please wait before retrying.',
-    'token' => 'This password reset token is invalid.',
-    'user' => "We can't find a user with that email address.",
+    'reset' => 'Kata sandi Anda telah berhasil direset!',
+    'sent' => 'Kami telah mengirimkan tautan untuk mereset kata sandi Anda melalui email!',
+    'throttled' => 'Silakan tunggu sebelum mencoba kembali.',
+    'token' => 'Token reset kata sandi tidak valid.',
+    'user' => 'Kami tidak dapat menemukan pengguna dengan alamat email tersebut.'
 
 ];

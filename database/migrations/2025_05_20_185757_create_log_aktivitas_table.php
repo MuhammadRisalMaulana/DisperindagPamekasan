@@ -17,8 +17,6 @@ class CreateLogAktivitasTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id'); // ID admin/petugas
             $table->string('aksi');               // deskripsi aksi
-            $table->string('model')->nullable();  // nama model/data yang dimodifikasi
-            $table->unsignedBigInteger('model_id')->nullable(); // ID data
             $table->enum('status',['Belum di Proses','Sedang di Proses','Selesai'])->default('Belum di Proses');
             $table->timestamps();
 
