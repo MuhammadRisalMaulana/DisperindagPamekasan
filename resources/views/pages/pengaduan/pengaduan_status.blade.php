@@ -46,9 +46,10 @@
                         $status = strtolower($pengaduan->status);
 
                         $statusColor = match ($status) {
-                            'belum di proses' => 'bg-yellow-100 text-yellow-800',
-                            'sedang di proses' => 'bg-blue-100 text-blue-800',
-                            'selesai' => 'bg-green-100 text-green-800',
+                            'belum di proses' => 'bg-blue-100 text-blue-700 dark:text-blue-100 dark:bg-blue-700',
+                            'sedang di proses' => 'bg-orange-100 text-orange-700 dark:text-white dark:bg-orange-600',
+                            'ditolak' => 'bg-red-100 text-red-700 dark:text-white dark:bg-red-600',
+                            'selesai' => 'bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100',
                             default => 'bg-gray-100 text-gray-800',
                         };
                     @endphp
@@ -59,7 +60,8 @@
                         <p><strong>Diperbarui pada:</strong> {{ $pengaduan->updated_at->format('d M Y H:i') }}</p>
                         <p>
                             <strong>Status:</strong>
-                            <span class="inline-block px-3 py-1 rounded-full text-sm font-medium {{ $statusColor }}">
+                            <span id="status"
+                                class="inline-block px-3 py-1 rounded-full text-sm font-medium {{ $statusColor }}">
                                 {{ $pengaduan->status }}
                             </span>
                         </p>
@@ -101,4 +103,28 @@
 
         </div>
     </main>
+@endsection
+
+@section('scripts')
+    <script>
+        // Jalankan polling setiap 15 detik
+        setInterval(() => {
+            const url = window.location.href;
+
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    // Ambil elemen status dari response HTML baru
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newStatus = doc.querySelector('#status-pengaduan');
+
+                    if (newStatus) {
+                        // Ganti status di halaman saat ini
+                        document.querySelector('#status-pengaduan').innerHTML = newStatus.innerHTML;
+                        document.querySelector('#status-pengaduan').className = newStatus.className;
+                    }
+                });
+        }, 15000); // tiap 15 detik
+    </script>
 @endsection

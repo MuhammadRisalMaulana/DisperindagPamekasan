@@ -27,16 +27,21 @@
                             class="block w-full text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray"
                             name="tanggapan" required>
                             <option value="" disabled selected>Pilih Tanggapan</option>
-                            <option value="Terima kasih atas laporan Anda, kami akan menindaklanjuti segera.">Terima kasih
-                                atas laporan Anda, kami akan menindaklanjuti segera.</option>
-                            <option value="Laporan Anda sedang dalam proses pengecekan oleh tim kami.">Laporan Anda sedang
-                                dalam proses pengecekan oleh tim kami.</option>
-                            <option value="Masalah sudah berhasil kami selesaikan, terima kasih atas kesabarannya.">Masalah
-                                sudah berhasil kami selesaikan, terima kasih atas kesabarannya.</option>
-                            <option value="Mohon maaf atas ketidaknyamanannya, kami akan berupaya memperbaikinya.">Mohon
-                                maaf atas ketidaknyamanannya, kami akan berupaya memperbaikinya.</option>
-                            <option value="Silakan hubungi kami kembali jika ada keluhan lebih lanjut.">Silakan hubungi kami
-                                kembali jika ada keluhan lebih lanjut.</option>
+                            <option value="Laporan Anda sedang dalam proses pengecekan oleh tim kami.">Laporan Anda Sedang
+                                Dalam Proses Pengecekan Oleh Tim Kami.</option>
+                            <option
+                                value="Masalah
+                                Sudah berhasil kami Tindaklanjuti, Terima Kasih Atas Laporan Anda Silakan Hubungi Kami
+                                Kembali Jika Ada Keluhan Lebih Lanjut.">
+                                Masalah
+                                Sudah berhasil kami Tindaklanjuti, Terima Kasih Atas Laporan Anda Silakan Hubungi Kami
+                                Kembali Jika Ada Keluhan Lebih Lanjut.</option>
+                            <option
+                                value="Mohon Maaf Laporan Anda Kami Tolak, Dikarenakan Pengaduan yang Anda Laporkan Tidak Valid Setelah
+                                Kami Observasi Secara Langsung.">
+                                Mohon Maaf Laporan Anda Kami Tolak, Dikarenakan Pengaduan yang Anda Laporkan Tidak Valid
+                                Setelah
+                                Kami Observasi Secara Langsung.</option>
                         </select>
                     </label>
 
@@ -49,6 +54,7 @@
                             <option value="Belum di Proses">Belum di Proses</option>
                             <option value="Sedang di Proses">Sedang di Proses</option>
                             <option value="Selesai">Selesai</option>
+                            <option value="Ditolak">Ditolak</option>
                         </select>
                     </label>
 
@@ -57,7 +63,7 @@
                         class="mt-4 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                         Tanggapi
                     </button>
-                    
+
                     <a href="<?php echo e(url()->previous()); ?>"
                         class="mt-4 ml-4 inline-block text-sm text-blue-600 hover:underline dark:text-blue-400">
                         ← Kembali ke Detail

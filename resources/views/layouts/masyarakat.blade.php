@@ -23,6 +23,7 @@
   </div>
   @include('sweetalert::alert')
   @include('includes.masyarakat.script')
+  @yield('scripts')
 </body>
 
 </html>

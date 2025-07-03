@@ -22,7 +22,7 @@ class Pengaduans extends Migration
             $table->text('lokasi_kejadian');
             $table->text('keterangan_tambahan')->nullable();
             $table->string('image');
-            $table->enum('status', ['belum diproses', 'diproses', 'selesai',])->default('belum diproses');
+            $table->string('status')->default('belum diproses');
             $table->string('token', 6)->unique();
             $table->timestamps();
         });
