@@ -61,10 +61,21 @@ class PengaduanController extends Controller
             'user_alamat' => 'required|string|max:255',
             'phone' => 'required|string|regex:/^[0-9\-\+]{9,15}$/',
             'lokasi_kejadian' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'required|string|min:15',
             'keterangan_tambahan' => 'nullable|string',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:10240',
         ]);
+
+        $isDuplicate = Pengaduan::where('name', $request->name)
+            ->where('lokasi_kejadian', $request->lokasi_kejadian)
+            ->where('phone', $request->phone)
+            ->where('description', $request->description)
+            ->whereDate('created_at', now()->toDateString())
+            ->exists();
+
+        if ($isDuplicate) {
+            return back()->withErrors(['duplicate' => 'Pengaduan serupa sudah pernah dikirim hari ini.'])->withInput();
+        }
 
         if (!$request->hasFile('image') || !$request->file('image')->isValid()) {
             return back()->withErrors(['image' => 'File gagal diunggah.'])->withInput();
@@ -76,7 +87,6 @@ class PengaduanController extends Controller
             $token = strtoupper(Str::random(6));
         } while (Pengaduan::where('token', $token)->exists());
 
-        // Simpan data ke database tanpa user_id
         $pengaduan = Pengaduan::create([
             'name' => $request->name,
             'user_alamat' => $request->user_alamat,
@@ -87,14 +97,6 @@ class PengaduanController extends Controller
             'image' => $imagePath,
             'token' => $token,
         ]);
-
-        // // Kirim ke Telegram (opsional)
-        // $pesan = "📩 *Laporan Baru Diterima!*\n"
-        //     . "Nama: {$pengaduan->name}\n"
-        //     . "Lokasi: {$pengaduan->lokasi_kejadian}\n"
-        //     . "Tanggal: " . Carbon::parse($pengaduan->created_at)->translatedFormat('l, d-m-Y H:i') . "\n"
-        //     . "Token: {$pengaduan->token}\n";
-        // $this->sendTelegram($pesan);
 
         // Kirim Token via WhatsApp
         $formattedPhone = preg_replace('/^0/', '62', $request->phone);
@@ -110,11 +112,9 @@ class PengaduanController extends Controller
             Alert::success('Berhasil', 'Laporan Anda telah kami terima. Silakan cek pesan WhatsApp Anda.');
         } else {
             Alert::error('Gagal', 'Pesan WhatsApp tidak terkirim. Silakan coba lagi.');
-            // Optional: log error
             \Log::error('WhatsApp Error:', ['response' => $response]);
         }
 
-        // Tampilkan notifikasi web
         Alert::success('Berhasil', 'Laporan Anda telah kami terima. Silakan cek pesan WhatsApp Anda.');
 
         return redirect()->route('pengaduan.sukses', ['token' => $token, 'name' => $request->name]);

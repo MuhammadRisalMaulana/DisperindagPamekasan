@@ -24,13 +24,24 @@
                         <h2 class="mt-4">Status :
                             @if ($item->status == 'Belum di Proses')
                                 <span
-                                    class="px-2 py-1 font-semibold text-red-700 bg-red-100 rounded-md dark:text-red-100 dark:bg-red-700">{{ $item->status }}</span>
+                                    class="px-2 py-1 font-semibold leading-tight text-blue-700 bg-blue-100 rounded-md dark:text-blue-100 dark:bg-blue-700">
+                                    {{ $item->status }}
+                                </span>
                             @elseif ($item->status == 'Sedang di Proses')
                                 <span
-                                    class="px-2 py-1 font-semibold text-orange-700 bg-orange-100 rounded-md dark:text-white dark:bg-orange-600">{{ $item->status }}</span>
+                                    class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-md dark:text-white dark:bg-orange-600">
+                                    {{ $item->status }}
+                                </span>
+                            @elseif ($item->status == 'Ditolak')
+                                <span
+                                    class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-md dark:text-white dark:bg-red-600">
+                                    {{ $item->status }}
+                                </span>
                             @else
                                 <span
-                                    class="px-2 py-1 font-semibold text-green-700 bg-green-100 rounded-md dark:bg-green-700 dark:text-green-100">{{ $item->status }}</span>
+                                    class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-md dark:bg-green-700 dark:text-green-100">
+                                    {{ $item->status }}
+                                </span>
                             @endif
                         </h2>
                     </div>

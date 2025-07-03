@@ -113,7 +113,7 @@
                                     <?php if($item->status == 'Belum di Proses'): ?>
                                         <td class="px-4 py-3 text-xs">
                                             <span
-                                                class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-md dark:text-red-100 dark:bg-red-700">
+                                                class="px-2 py-1 font-semibold leading-tight text-blue-700 bg-blue-100 rounded-md dark:text-blue-100 dark:bg-blue-700">
                                                 <?php echo e($item->status); ?>
 
                                             </span>
@@ -122,6 +122,14 @@
                                         <td class="px-4 py-3 text-xs">
                                             <span
                                                 class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-md dark:text-white dark:bg-orange-600">
+                                                <?php echo e($item->status); ?>
+
+                                            </span>
+                                        </td>
+                                    <?php elseif($item->status == 'Ditolak'): ?>
+                                        <td class="px-4 py-3 text-xs">
+                                            <span
+                                                class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-md dark:text-white dark:bg-red-600">
                                                 <?php echo e($item->status); ?>
 
                                             </span>
