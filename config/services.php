@@ -34,5 +34,9 @@ return [
         'token' => env('FONNTE_API_KEY'),
         'device' => env('FONNTE_DEVICE_ID'),
     ],
-    
+
+    'google_maps' => [
+        'key' => env('GOOGLE_MAPS_API_KEY'),
+    ],
+
 ];

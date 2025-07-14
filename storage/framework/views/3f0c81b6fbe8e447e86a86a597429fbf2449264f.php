@@ -66,7 +66,7 @@
 
                     <a href="<?php echo e(url()->previous()); ?>"
                         class="mt-4 ml-4 inline-block text-sm text-blue-600 hover:underline dark:text-blue-400">
-                        ← Kembali ke Detail
+                        ← Kembali
                     </a>
                 </div>
             </form>

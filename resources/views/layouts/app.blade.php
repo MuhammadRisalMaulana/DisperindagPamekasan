@@ -9,7 +9,11 @@
   @stack('prepend-style')
   @include('includes.admin.style')
   @stack('addon-style')
-
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
 </head>
 
 <body>

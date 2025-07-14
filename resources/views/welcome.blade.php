@@ -17,49 +17,41 @@
 <body class="bg-white text-gray-800 font-sans">
 
     <!-- Navbar -->
-    <nav class="bg-green-600 text-white shadow-md fixed top-0 w-full z-50">
+    <nav id="navbar" class="bg-green-600 text-white shadow-md fixed top-0 w-full z-50 transition-all duration-300">
         <div class="container mx-auto flex items-center justify-between p-4 px-6">
+            <!-- Logo + Judul -->
             <div class="flex items-center space-x-3">
-                <img src="{{ asset('img/logodisperindag.png') }}" class="w-10 h-10 transform hover:scale-110 transition"
-                    alt="Logo" />
-                <span class="font-bold text-xl">MADUKONCER</span>
+                <img src="{{ asset('img/logodisperindag.png') }}"
+                    class="w-10 h-10 transform hover:scale-110 transition duration-300" alt="Logo" />
+                <span class="font-bold text-xl tracking-wide">MADUKONCER</span>
             </div>
-            <div class="space-x-6 hidden md:flex">
-                <ul class="flex space-x-4">
-                    <li>
-                        <a href="/"
-                            class="text-white-700 hover:text-gray-500 text-xl font-semibold transition duration-200">
-                            Home
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#tatacara"
-                            class="text-white-700 hover:text-gray-500 text-xl font-semibold transition duration-200">
-                            Tata Cara
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/berita"
-                            class="text-white-700 hover:text-gray-500 text-xl font-semibold transition duration-200">
-                            Berita
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#lokasi"
-                            class="text-white-700 hover:text-gray-500 text-xl font-semibold transition duration-200">
-                            Lokasi
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/pengaduan/status"
-                            class="text-white-700 hover:text-gray-500 text-xl font-semibold transition duration-200">
-                            Cek Pengaduan
-                        </a>
-                    </li>
-                </ul>
+
+            <!-- Toggle (Mobile) -->
+            <div class="md:hidden">
+                <button id="navToggle" class="focus:outline-none text-white hover:text-gray-300">
+                    <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
+                        <path d="M4 5h16M4 12h16M4 19h16" />
+                    </svg>
+                </button>
             </div>
+
+            <!-- Menu -->
+            <ul id="navMenu"
+                class="hidden md:flex md:space-x-6 flex-col md:flex-row absolute md:static top-full left-0 w-full md:w-auto bg-green-600 md:bg-transparent md:space-y-0 space-y-3 px-6 md:px-0 py-4 md:py-0 text-lg font-semibold z-50">
+                <li><a href="/" class="hover:text-gray-300 transition duration-200">Home</a></li>
+                <li><a href="#profil" class="hover:text-gray-300 transition duration-200">Profil</a></li>
+                <li><a href="#tentangprogram" class="hover:text-gray-300 transition duration-200">Tentang Program</a>
+                </li>
+                <li><a href="#tatacara" class="hover:text-gray-300 transition duration-200">Tata Cara</a></li>
+                <li><a href="/berita" class="hover:text-gray-300 transition duration-200">Berita</a></li>
+                <li><a href="#lokasi" class="hover:text-gray-300 transition duration-200">Lokasi</a></li>
+                <li><a href="#kontak" class="hover:text-gray-300 transition duration-200">Kontak</a></li>
+                <li><a href="/pengaduan/status" class="hover:text-gray-300 transition duration-200">Cek Pengaduan</a>
+                </li>
+            </ul>
         </div>
     </nav>
+
 
     <!-- Hero -->
     <section class="relative h-screen flex items-center justify-center text-white">
@@ -74,7 +66,7 @@
                     PAMEKASAN</p>
                 <a href="{{ url('pengaduan') }}"
                     class="bg-green-500 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded shadow-lg transition">
-                    LAPORKAN PENGADUAN
+                    LAPORKAN SEKARANG
                 </a>
             </div>
             <div class="w-full md:w-3/5 text-center">
@@ -84,22 +76,130 @@
         </div>
     </section>
 
+
+    <!-- PROFIL INSTANSI -->
+    <section id="profil" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-green-700 text-center mb-10">Profil</h2>
+
+            <div class="flex flex-col lg:flex-row gap-10 items-center">
+                <!-- Gambar Kantor -->
+                <div class="lg:w-1/2">
+                    <img src="{{ asset('img/kantor.jpg') }}" alt="Kantor Disperindag Pamekasan"
+                        class="rounded-xl shadow-lg w-full max-h-[400px] object-cover">
+                </div>
+
+                <!-- Deskripsi -->
+                <div class="lg:w-1/2 text-gray-800 leading-relaxed text-lg">
+                    <p class="mb-4">
+                        <strong>Dinas Perindustrian dan Perdagangan (Disperindag)</strong> Kabupaten Pamekasan adalah
+                        instansi pemerintah daerah yang berperan dalam menyelenggarakan urusan pemerintahan bidang
+                        perindustrian dan perdagangan, termasuk pengawasan terhadap peredaran barang dan jasa serta
+                        perlindungan konsumen.
+                    </p>
+
+                    <p class="mb-4">
+                        Disperindag memiliki komitmen untuk memberikan pelayanan publik yang cepat, transparan, dan
+                        responsif melalui berbagai inovasi digital, salah satunya adalah sistem pengaduan konsumen
+                        berbasis website, <strong>MADU KONCER</strong>.
+                    </p>
+
+                    <h3 class="text-xl font-semibold text-green-700 mt-6 mb-2">Struktur dan Bidang Layanan:</h3>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><strong>Bidang Industri:</strong> Pengembangan industri kecil, menengah, dan aneka.</li>
+                        <li><strong>Bidang Perdagangan Dalam Negeri dan Luar Negeri:</strong> Distribusi barang dan
+                            stabilitas harga.</li>
+                        <li><strong>Bidang Pengawasan dan Perlindungan Konsumen:</strong> Menangani pengawasan
+                            barang/jasa, pengujian mutu, dan penanganan pengaduan.</li>
+                        <li><strong>Bidang Pengelolaan Pasar:</strong> Fasilitasi dan pembinaan pasar rakyat serta pasar
+                            modern.</li>
+                    </ul>
+
+                    <div class="mt-6">
+                        <a href="https://disperindag.pamekasankab.go.id" target="_blank"
+                            class="inline-block bg-green-600 hover:bg-green-700 text-white font-medium px-3 py-2 rounded-lg shadow transition">
+                            🌐 Kunjungi Website Resmi
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROGRAM MADU KONCER -->
+    <section id="tentangprogram" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center text-green-700 mb-8">Tentang Program MADU KONCER</h2>
+
+            <div class="flex flex-col md:flex-row items-center gap-10">
+                <!-- Gambar ilustrasi -->
+                <div class="md:w-1/2">
+                    <img src="{{ asset('img/brosur.png') }}" alt="MADU KONCER Program"
+                        class="rounded-xl shadow-md w-full object-cover">
+                </div>
+
+                <!-- Deskripsi Program -->
+                <div class="md:w-1/2 text-gray-800 leading-relaxed text-lg">
+                    <p class="mb-4">
+                        <strong>MADU KONCER</strong> adalah singkatan dari <strong>Masyarakat Peduli Konsumen
+                            Cerdas</strong>, sebuah program layanan pengaduan masyarakat berbasis web yang diluncurkan
+                        oleh <strong>Dinas Perindustrian dan Perdagangan (DISPERINDAG) Kabupaten Pamekasan</strong>.
+                    </p>
+
+                    <p class="mb-4">
+                        <strong>Program ini diselenggarakan secara khusus oleh Bidang Pengawasan dan Perlindungan
+                            Konsumen</strong> sebagai bentuk tanggung jawab dalam pengawasan peredaran barang dan jasa
+                        serta perlindungan terhadap hak-hak konsumen di wilayah Kabupaten Pamekasan.
+                    </p>
+
+                    <p class="mb-4">
+                        Layanan ini memberikan kemudahan kepada masyarakat untuk melaporkan produk yang tidak sesuai,
+                        kadaluarsa, atau berpotensi merugikan, sekaligus memfasilitasi respons cepat melalui notifikasi
+                        otomatis dan pelacakan laporan secara daring.
+                    </p>
+
+                    <h3 class="text-xl font-semibold text-green-700 mt-6 mb-2">🎯 Tujuan Program</h3>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>Melindungi konsumen dari barang/jasa yang merugikan atau membahayakan.</li>
+                        <li>Meningkatkan kesadaran masyarakat agar menjadi konsumen cerdas dan kritis.</li>
+                        <li>Meningkatkan transparansi dan efisiensi dalam penanganan pengaduan.</li>
+                        <li>Mempermudah pelaporan dan pemantauan oleh petugas lapangan secara real-time.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-semibold text-green-700 mt-6 mb-2">🛠 Fitur Unggulan</h3>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>Form pelaporan pengaduan berbasis lokasi (Google Maps Integration).</li>
+                        <li>Notifikasi otomatis via WhatsApp (berisi token & status pengaduan).</li>
+                        <li>Tracking laporan berdasarkan token unik.</li>
+                        <li>Dashboard admin & petugas untuk verifikasi dan tindak lanjut cepat.</li>
+                        <li>Riwayat laporan tersimpan aman dan transparan.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Tata Cara -->
     <section id="tatacara" class="py-20 bg-gray-100">
         <div class="container mx-auto px-6">
             <h2 class="text-3xl font-bold text-center mb-12 text-green-700">Tata Cara Pengaduan</h2>
-            <div class="grid gap-10 md:grid-cols-4 text-center">
-                @foreach ([['img' => 'tulis.png', 'title' => '1. Tulis Laporan', 'desc' => 'Tulis laporan keluhan Anda dengan jelas.'], ['img' => 'proses.png', 'title' => '2. Proses Verifikasi', 'desc' => 'Tunggu sampai laporan Anda diverifikasi.'], ['img' => 'tindaklanjut.png', 'title' => '3. Tindak Lanjut', 'desc' => 'Laporan Anda sedang dalam tindak lanjut.'], ['img' => 'success.png', 'title' => '4. Selesai', 'desc' => 'Laporan pengaduan telah selesai ditindak.']] as $step)
-                    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+
+            <!-- Flex scroll horizontal dengan ukuran kartu konsisten -->
+            <div class="flex space-x-6 overflow-x-auto pb-4 no-scrollbar">
+                @foreach ([['img' => 'tulis.png', 'title' => '1. Tulis Laporan', 'desc' => 'Pengguna mengisi form pengaduan melalui website disertai bukti dan lokasi kejadian.'], ['img' => 'whatsapp.png', 'title' => '2. Notifikasi WhatsApp', 'desc' => 'Sistem mengirim notifikasi otomatis ke WhatsApp pengguna berisi token & status awal.'], ['img' => 'verifikasipengaduan.png', 'title' => '3. Proses Verifikasi', 'desc' => 'Memeriksa dan memverifikasi laporan yang masuk sebelum diproses lebih lanjut.'], ['img' => 'tindaklanjut.png', 'title' => '4. Tindak Lanjut', 'desc' => 'Laporan diteruskan ke petugas lapangan untuk dilakukan pengecekan dan tindakan.'], ['img' => 'success.png', 'title' => '5. Selesai', 'desc' => 'Laporan pengaduan telah selesai ditindak.'], ['img' => 'cekpengaduan.png', 'title' => '6. Cek Pengaduan', 'desc' => 'Cek Status Pengaduan menggunakan Token yang sudah di kirim melalui Whatsapp.']] as $step)
+                    <div
+                        class="w-72 min-h-[350px] flex-shrink-0 bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition flex flex-col items-center justify-start text-center">
                         <img src="{{ asset('img/' . $step['img']) }}" alt="{{ $step['title'] }}"
-                            class="mx-auto w-20 mb-6 transform hover:scale-110 transition">
+                            class="w-20 h-20 mb-4 object-contain">
                         <h3 class="text-xl font-bold mb-2">{{ $step['title'] }}</h3>
-                        <p class="text-gray-600">{{ $step['desc'] }}</p>
+                        <p class="text-gray-600 text-sm">{{ $step['desc'] }}</p>
                     </div>
                 @endforeach
             </div>
         </div>
     </section>
+
+
 
     <!-- Berita -->
     <section class="py-20 bg-white">
@@ -171,14 +271,68 @@
         </div>
     </section>
 
+    <!-- KONTAK -->
+    <section id="kontak" class="bg-white py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-green-700 mb-6">Kontak Resmi</h2>
+            <p class="text-lg mb-4">Silakan hubungi kami untuk informasi lebih lanjut terkait layanan atau pengaduan:
+            </p>
+
+            <ul class="text-lg space-y-3 text-gray-800 mb-6">
+                <li>
+                    <strong>🌐 Website Resmi :</strong>
+                    <a href="https://disperindag.pamekasankab.go.id" target="_blank"
+                        class="text-green-600 hover:underline">
+                        disperindag.pamekasankab.go.id
+                    </a>
+                </li>
+                <li>
+                    <strong>📧 Email :</strong>
+                    <a href="mailto:disperindag.pamekasan@gmail.com" class="text-green-600 hover:underline">
+                        disperindag.pamekasan@gmail.com
+                    </a>
+                </li>
+            </ul>
+
+            <div class="flex justify-center space-x-6">
+                <a href="https://www.facebook.com/disperindagpamekasan" target="_blank"
+                    class="text-green-700 hover:text-green-900 text-2xl">
+                    <i class="fab fa-facebook"></i> Facebook
+                </a>
+                <a href="https://www.instagram.com/disperindag_pmk" target="_blank"
+                    class="text-green-700 hover:text-green-900 text-2xl">
+                    <i class="fab fa-instagram"></i> Instagram
+                </a>
+            </div>
+        </div>
+    </section>
+
+
 
     <!-- Footer -->
     <footer class="bg-green-600 text-white py-4 text-center">
-        © {{ now()->year }} MADUKONCER DISPERINDAG PAMEKASAN | By
+        © {{ now()->year }} MADUKONCER - DISPERINDAG PAMEKASAN | By
         <a href="login" class="underline hover:text-green-200" target="_blank">POLINEMA PSDKU PAMEKASAN</a>
     </footer>
 
     @include('sweetalert::alert')
+
+    <script>
+        document.getElementById('navToggle').addEventListener('click', function() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Optional: Scroll change navbar style
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nav.classList.add('bg-green-700', 'shadow-lg');
+            } else {
+                nav.classList.remove('bg-green-700', 'shadow-lg');
+            }
+        });
+    </script>
 
 </body>
 
