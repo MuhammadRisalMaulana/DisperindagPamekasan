@@ -16,7 +16,17 @@
                         <h2>Nama Pelapor : <?php echo e($item->name); ?></h2>
                         <h2 class="mt-4">Alamat : <?php echo e($item->user_alamat); ?></h2>
                         <h2 class="mt-4">No Telepon : <?php echo e($item->phone); ?></h2>
-                        <h2 class="mt-4">Lokasi Kejadian : <?php echo e($item->lokasi_kejadian); ?></h2>
+                        <h2 class="mt-4">Lokasi Koordinat : <?php echo e($item->lokasi_kejadian); ?></h2>
+                        
+                        
+                        <div id="alamatContainer" class="mt-2 p-3 bg-gray-100 rounded-md">
+                            <p class="text-sm font-semibold text-gray-700">Alamat Lokasi:</p>
+                            <p id="alamatLengkap" class="text-sm text-gray-800 mt-1">Memuat alamat...</p>
+                            <a id="mapLink" href="#" target="_blank"
+                                class="inline-block mt-2 text-sm text-blue-600 hover:underline">
+                                🌍 Lihat di Google Maps
+                            </a>
+                        </div>
                         <h2 class="mt-4">Tanggal :
                             <?php echo e($item->created_at->locale('id')->isoFormat('dddd, D MMMM YYYY - HH:mm:ss')); ?></h2>
                         <h2 class="mt-4">Status :
@@ -108,6 +118,50 @@
             </div>
         </div>
     </main>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Parse coordinates from lokasi_kejadian
+            const lokasiKejadian = "<?php echo e($item->lokasi_kejadian); ?>";
+            const coords = lokasiKejadian.split(',').map(coord => parseFloat(coord.trim()));
+            
+            if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
+                const lat = coords[0];
+                const lon = coords[1];
+                
+                const alamatLengkap = document.getElementById('alamatLengkap');
+                const mapLink = document.getElementById('mapLink');
+                
+                // Set Google Maps link
+                mapLink.href = `https://www.google.com/maps?q=${lat},${lon}`;
+                
+                // Fetch address using Nominatim (OpenStreetMap)
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.address) {
+                            const address = data.address;
+                            let alamat = '';
+                            
+                            // Build address string from components
+                            if (address.road) alamat += address.road + ', ';
+                            if (address.village) alamat += address.village + ', ';
+                            if (address.subdistrict) alamat += address.subdistrict + ', ';
+                            if (address.city_district) alamat += address.city_district + ', ';
+                            if (address.city) alamat += address.city;
+                            
+                            alamatLengkap.textContent = alamat || 'Alamat tidak ditemukan';
+                        } else {
+                            alamatLengkap.textContent = 'Alamat tidak ditemukan';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching address:', error);
+                        alamatLengkap.textContent = 'Gagal memuat alamat';
+                    });
+            } else {
+                document.getElementById('alamatLengkap').textContent = 'Format koordinat tidak valid';
+            }
+        });
+    </script>
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\DISPERINDAG_PROJECT-main\resources\views/pages/admin/pengaduan/detail.blade.php ENDPATH**/ ?>

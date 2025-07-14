@@ -24,6 +24,7 @@
   @include('sweetalert::alert')
   @include('includes.masyarakat.script')
   @yield('scripts')
+  @stack('scripts')
 </body>
 
 </html>

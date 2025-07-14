@@ -64,6 +64,9 @@ class PengaduanController extends Controller
             'description' => 'required|string|min:15',
             'keterangan_tambahan' => 'nullable|string',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:10240',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+
         ]);
 
         $isDuplicate = Pengaduan::where('name', $request->name)
@@ -96,6 +99,8 @@ class PengaduanController extends Controller
             'keterangan_tambahan' => $request->keterangan_tambahan,
             'image' => $imagePath,
             'token' => $token,
+            'latitude' => $request->latitude,     // ✅ DITAMBAHKAN
+            'longitude' => $request->longitude,
         ]);
 
         // Kirim Token via WhatsApp

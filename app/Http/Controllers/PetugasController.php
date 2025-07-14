@@ -61,7 +61,7 @@ class PetugasController extends Controller
         $request->validate([
             'alamat' => 'required|string',
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'email' => 'required|email|unique:users,email',
             'phone' => 'required|string|max:15',
             'password' => 'required|string|confirmed|min:8',
 

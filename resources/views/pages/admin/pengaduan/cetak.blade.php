@@ -102,9 +102,14 @@
     </div>
 
     <div class="section-title">Data Pelapor</div>
-    <div class="info">Nama: {{ $pengaduan->name }}</div>
-    <div class="info">Alamat: {{ $pengaduan->user_alamat }}</div>
-    <div class="info">No. Telepon: {{ $pengaduan->phone }}</div>
+    <div class="info">Nama : {{ $pengaduan->name }}</div>
+    <div class="info">Alamat : {{ $pengaduan->user_alamat }}</div>
+    <div class="info">No. Telepon : {{ $pengaduan->phone }}</div>
+
+    <div class="section-title">Lokasi Kejadian</div>
+    <div class="address-box">
+        <div>Koordinat :{{ $pengaduan->lokasi_kejadian }}</div>
+    </div>
 
     <div class="section-title">Detail Pengaduan</div>
 
@@ -127,7 +132,7 @@
             <tr>
                 <td><strong>Deskripsi Pengaduan:</strong><br>{{ $pengaduan->description }}</td>
                 <td><strong>Keterangan
-                        Tambahan:</strong><br>{{ $pengaduan->keterangan_tambahan ?? 'Tidak ada keterangan tambahan' }}
+                        Tambahan :</strong><br>{{ $pengaduan->keterangan_tambahan ?? 'Tidak ada keterangan tambahan' }}
                 </td>
             </tr>
         </tbody>

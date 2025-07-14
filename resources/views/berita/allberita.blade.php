@@ -11,20 +11,38 @@
 
 <body class="bg-white text-gray-800 font-sans">
 
-    <!-- Navbar -->
-    <nav class="bg-green-600 text-white shadow-md fixed top-0 w-full z-50">
+    <nav id="navbar" class="bg-green-600 text-white shadow-md fixed top-0 w-full z-50 transition-all duration-300">
         <div class="container mx-auto flex items-center justify-between p-4 px-6">
+            <!-- Logo + Judul -->
             <div class="flex items-center space-x-3">
-                <img src="{{ asset('img/logodisperindag.png') }}" class="w-10 h-10 transform hover:scale-110 transition"
-                    alt="Logo" />
-                <span class="font-bold text-xl">MADUKONCER</span>
+                <img src="{{ asset('img/logodisperindag.png') }}"
+                    class="w-10 h-10 transform hover:scale-110 transition duration-300" alt="Logo" />
+                <span class="font-bold text-xl tracking-wide">MADUKONCER</span>
             </div>
-            <ul class="flex space-x-4 hidden md:flex">
-                <li><a href="/" class="hover:text-blue-200 font-semibold">Home</a></li>
-                <li><a href="/" class="hover:text-blue-200 font-semibold">Tata Cara</a></li>
-                <li><a href="/berita" class="hover:text-blue-200 font-semibold">Berita</a></li>
-                <li><a href="#lokasi" class="hover:text-blue-200 font-semibold">Lokasi</a></li>
-                <li><a href="/pengaduan/status" class="hover:text-blue-200 font-semibold">Cek Pengaduan</a></li>
+
+            <!-- Toggle (Mobile) -->
+            <div class="md:hidden">
+                <button id="navToggle" class="focus:outline-none text-white hover:text-gray-300">
+                    <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
+                        <path d="M4 5h16M4 12h16M4 19h16" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Menu -->
+            <ul id="navMenu"
+                class="hidden md:flex md:space-x-6 flex-col md:flex-row absolute md:static top-full left-0 w-full md:w-auto bg-green-600 md:bg-transparent md:space-y-0 space-y-3 px-6 md:px-0 py-4 md:py-0 text-lg font-semibold z-50">
+                <li><a href="{{ url('/') }}" class="hover:text-gray-300 transition duration-200">Home</a></li>
+                <li><a href="{{ url('/#profil') }}" class="hover:text-gray-300 transition duration-200">Profil</a></li>
+                <li><a href="{{ url('/#tentangprogram') }}" class="hover:text-gray-300 transition duration-200">Tentang
+                        Program</a></li>
+                <li><a href="{{ url('/#tatacara') }}" class="hover:text-gray-300 transition duration-200">Tata Cara</a>
+                </li>
+                <li><a href="{{ url('/berita') }}" class="hover:text-gray-300 transition duration-200">Berita</a></li>
+                <li><a href="{{ url('/#lokasi') }}" class="hover:text-gray-300 transition duration-200">Lokasi</a></li>
+                <li><a href="{{ url('/#kontak') }}" class="hover:text-gray-300 transition duration-200">Kontak</a></li>
+                <li><a href="{{ url('/pengaduan/status') }}" class="hover:text-gray-300 transition duration-200">Cek
+                        Pengaduan</a></li>
             </ul>
         </div>
     </nav>
@@ -56,7 +74,6 @@
                     </div>
                 </div>
             </div>
-            
         @endforeach
     </section>
 
@@ -67,6 +84,24 @@
     </footer>
 
     @include('sweetalert::alert')
+
+    <script>
+        document.getElementById('navToggle').addEventListener('click', function() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Scroll style navbar
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nav.classList.add('bg-green-700', 'shadow-lg');
+            } else {
+                nav.classList.remove('bg-green-700', 'shadow-lg');
+            }
+        });
+    </script>
+
 
 </body>
 
